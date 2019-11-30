@@ -1,5 +1,6 @@
 package MainClass;
 
+import MyClass.MyGif;
 import MyClass.MyImgJpanel;
 import MyClass.MyJlabel;
 
@@ -14,7 +15,7 @@ import java.awt.event.MouseEvent;
  * @author 嘿 林梓鸿
  * @date 2019年 11月25日 18:02:08
  */
-public class MainGameJframe extends JFrame {
+public class MainGameJframe extends JFrame  {
     /**
      * map -> 地图
      */
@@ -59,14 +60,49 @@ public class MainGameJframe extends JFrame {
 //    private ExecutorService threadPool = Executors.newSingleThreadExecutor();
 //    private Future<Integer> future;
 
+    /**
+     * monster -> 怪物
+     */
+    private JLabel monster;
+
+    /**
+     * jLayeredPane ->  JLayeredPane层,用来解决JPanel重叠问题
+     */
+    private JLayeredPane jLayeredPane = this.getLayeredPane();
+
+    /**
+     * Drawing 动画线程类 继承Thread
+     */
+    private class Drawing extends Thread{
+        @Override
+        public void run(){
+            for (int i = 0;i<1000;i++){
+                monster.setBounds(5+1*i,64,200,75);
+                monster.repaint();
+                try {
+                    sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
+    }
+
 
 
     public MainGameJframe(){
         super("Tower Defense Game");
         this.initComponents();
+
         /**
          * 生成怪物线程
          */
+        for (int i = 0;i<5;i++){
+            new Drawing().start();
+
+        }
 
     }
 
@@ -96,7 +132,7 @@ public class MainGameJframe extends JFrame {
         //生成地图
 
         map.setBounds(0,0,screenWidth-600,screenHeight-300);
-        this.add(map);
+        jLayeredPane.add(map, Integer.valueOf(100));
         //地图大小位置
 
         moneytitile = new MyJlabel(this,"金币:",550,30,100,100);
@@ -112,6 +148,12 @@ public class MainGameJframe extends JFrame {
         tower.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         //炮塔光标
         add(tower);
+
+
+        this.monster = new MyGif("Image/timg.gif",100,100);
+        monster.setBounds(5,64,100,100);
+        jLayeredPane.add(monster,Integer.valueOf(200));
+//        add(monster);
 
         tower.addMouseListener(new MouseAdapter() {
             //炮塔监听事件

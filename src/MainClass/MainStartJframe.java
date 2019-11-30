@@ -3,6 +3,7 @@ package MainClass;
 import MyClass.MyImgJpanel;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * 第一个窗口类
@@ -87,7 +88,6 @@ public class MainStartJframe extends JFrame {
          * 让它变成把图片画成背景
          */
         BgJPanel = new MyImgJpanel("Image/bg.jpg");
-
 
 
         StartJPanel = new MyImgJpanel("Image/start.png");

@@ -19,7 +19,6 @@ public class MyImgJpanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g){
-        super.paintComponent(g);
         ImageIcon img = new ImageIcon(path);
         g.drawImage(img.getImage(),0,0,getWidth(),getHeight(),null);
     }
