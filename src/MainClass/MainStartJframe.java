@@ -44,6 +44,19 @@ public class MainStartJframe extends JFrame {
      */
     private javax.swing.JRadioButton DifficultyButton;
 
+    /**
+     * monsterInterval -> 怪物出现的时间间隔,由窗口1传递过来。默认为一般
+     * 简单为 -1 即每波怪物的时间间隔比默认值多1s
+     * 一般为 0 即每波怪物的时间间隔一致
+     * 困难为 1 即每波怪物的时间间隔比默认值少1
+     */
+    private int monsterInterval = 0;
+
+    /**
+     * monsterSpeed -> 怪物走动的速度,即线程刷新的快慢
+     */
+    private int monsterSpeed = 20;
+
 
 
     /**
@@ -175,7 +188,8 @@ public class MainStartJframe extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout BgLayout = new javax.swing.GroupLayout(BgJPanel);
+        javax.swing.GroupLayout BgLayout = new javax.swing.
+                GroupLayout(BgJPanel);
         BgJPanel.setLayout(BgLayout);
         //背景分组布局
 
@@ -241,13 +255,19 @@ public class MainStartJframe extends JFrame {
 
     private void easyButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        this.monsterInterval = -1;
+        this.monsterSpeed = 20;
     }
 
     private void commonButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        this.monsterInterval = 0;
+        this.monsterSpeed = 10;
     }
     private void difficultyButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        this.monsterInterval = 1;
+        this.monsterSpeed = 5;
     }
     private void StartJPanelMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
@@ -256,7 +276,7 @@ public class MainStartJframe extends JFrame {
         //关闭此窗口
 
 
-        new MainGameJframe().setVisible(true);
+        new MainGameJframe(monsterInterval,monsterSpeed).setVisible(true);
         //生成游戏界面窗口
 
     }

@@ -13,6 +13,8 @@ public class MyGif extends JLabel {
     private ImageIcon Icon;
     private int width;
     private int height;
+    private Image iBuffer;
+    private Graphics gBuffer;
 
     public MyGif(String path,int width,int height){
         this.width = width;
@@ -21,5 +23,18 @@ public class MyGif extends JLabel {
         this.setIcon(Icon);
 
         Icon.setImage(Icon.getImage().getScaledInstance(width, height, Image.SCALE_DEFAULT ));
+    }
+
+    @Override
+    public void update(Graphics scr)
+    {
+        if(iBuffer==null)
+        {
+            iBuffer=createImage(this.getSize().width,this.getSize().height);
+            gBuffer=iBuffer.getGraphics();
+        }
+        gBuffer.fillRect(0,0,this.getSize().width,this.getSize().height);
+        paint(gBuffer);
+        scr.drawImage(iBuffer,0,0,null);
     }
 }

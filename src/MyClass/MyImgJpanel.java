@@ -11,6 +11,9 @@ import java.awt.*;
  */
 public class MyImgJpanel extends JPanel {
     private String path;
+    private ImageIcon img;
+    private Image iBuffer;
+    private Graphics gBuffer;
     public MyImgJpanel(String path){
         this.path = path;
     }
@@ -19,8 +22,21 @@ public class MyImgJpanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g){
-        ImageIcon img = new ImageIcon(path);
+        img = new ImageIcon(path);
         g.drawImage(img.getImage(),0,0,getWidth(),getHeight(),null);
     }
 
+    @Override
+    public void update(Graphics scr)
+    {
+        iBuffer=createImage(getWidth(),getHeight());
+        gBuffer=iBuffer.getGraphics();
+        gBuffer.drawImage(new ImageIcon(path).getImage(),0,0,getWidth(),getHeight(),null);
+        paint(gBuffer);
+        scr.drawImage(iBuffer,0,0,this);
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 }

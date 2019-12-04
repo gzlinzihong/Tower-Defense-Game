@@ -1,5 +1,7 @@
 package MainClass;
 
+import GameObject.Monster;
+import GameObject.Tower;
 import MyClass.MyGif;
 import MyClass.MyImgJpanel;
 import MyClass.MyJlabel;
@@ -8,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /**
  * 游戏界面
@@ -16,15 +19,22 @@ import java.awt.event.MouseEvent;
  * @date 2019年 11月25日 18:02:08
  */
 public class MainGameJframe extends JFrame  {
+
+
     /**
      * map -> 地图
      */
     private JPanel map;
 
     /**
-     * tower ->炮塔
+     * tower ->炮塔图片
      */
     private JPanel tower;
+
+    /**
+     * Towers -> 炮塔集合
+     */
+    ArrayList<JPanel> Towers = new ArrayList<>();
 
     /**
      * screenWidth -> 屏幕宽度
@@ -56,6 +66,46 @@ public class MainGameJframe extends JFrame  {
      */
     public JLabel HP ;
 
+    /**
+     * sbx -> 鼠标x轴坐标
+     */
+    private int sbx;
+
+    /**
+     * sby -> 鼠标y轴坐标
+     */
+    private int sby;
+
+    /**
+     * test -> 工具人图片
+     */
+    private MyImgJpanel test = new MyImgJpanel("Image/tower.png");
+
+    /**
+     * hasClickedTowerFlag -> 是否点击炮塔标记
+     */
+    boolean hasClickedTowerFlag = false;
+
+    /**
+     * isPutDownFlag -> 是否将炮塔放下标记
+     */
+    boolean isPutDownFlag = false;
+
+    /**
+     * monsterInterval -> 怪物出现的时间间隔,由窗口1传递过来。默认为一般
+     * 简单为 -1 即每波怪物的时间间隔比默认值多1s
+     * 一般为 0 即每波怪物的时间间隔一致
+     * 困难为 1 即每波怪物的时间间隔比默认值少1
+     */
+    private int monsterInterval = 0;
+
+    /**
+     * monsterSpeed -> 怪物走动的速度,即线程刷新的快慢
+     */
+    private int monsterSpeed = 20;
+
+
+
 //    private boolean hasTowerFlag = false;
 //    private ExecutorService threadPool = Executors.newSingleThreadExecutor();
 //    private Future<Integer> future;
@@ -63,7 +113,7 @@ public class MainGameJframe extends JFrame  {
     /**
      * monster -> 怪物
      */
-    private JLabel monster;
+    private MyImgJpanel monster;
 
     /**
      * jLayeredPane ->  JLayeredPane层,用来解决JPanel重叠问题
@@ -73,14 +123,15 @@ public class MainGameJframe extends JFrame  {
     /**
      * Drawing 动画线程类 继承Thread
      */
+
     private class Drawing extends Thread{
         @Override
         public void run(){
-            for (int i = 0;i<1000;i++){
-                monster.setBounds(5+1*i,64,200,75);
-                monster.repaint();
+            for (int i = 0;i<8;i++){
+                Monster monster1 = new Monster("Image/howl.png", monsterSpeed, 70, 70);
+                jLayeredPane.add(monster1,Integer.valueOf(300));
                 try {
-                    sleep(20);
+                    sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -92,17 +143,20 @@ public class MainGameJframe extends JFrame  {
 
 
 
-    public MainGameJframe(){
+    public MainGameJframe(int monsterInterval,int monsterSpeed){
         super("Tower Defense Game");
+        this.monsterInterval = monsterInterval;
+        this.monsterSpeed = monsterSpeed;
         this.initComponents();
 
         /**
          * 生成怪物线程
          */
-        for (int i = 0;i<5;i++){
-            new Drawing().start();
-
-        }
+        new Drawing().start();
+//        for (int i = 0;i<5;i++){
+//            new Drawing().start();
+//
+//        }
 
     }
 
@@ -115,6 +169,8 @@ public class MainGameJframe extends JFrame  {
 
         this.setResizable(false);
         //设置窗口大小不可更改
+
+
 
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -131,9 +187,45 @@ public class MainGameJframe extends JFrame  {
         this.map = new MyImgJpanel("Image/map.png");
         //生成地图
 
-        map.setBounds(0,0,screenWidth-600,screenHeight-300);
+        map.setBounds(0,4,1190,770);
         jLayeredPane.add(map, Integer.valueOf(100));
         //地图大小位置
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (hasClickedTowerFlag == true) {
+                    isPutDownFlag = true;
+                }
+                    if (isPutDownFlag == true) {
+
+                        Tower t = new Tower("Image/tower.png");
+                        jLayeredPane.add(t,Integer.valueOf(2000));
+                        t.setBounds(sbx-50,sby-90,100,100);
+                        Towers.add(t);
+                        test.setBounds(screenWidth-500, 300, 100, 100);
+                        hasClickedTowerFlag = false;
+                        isPutDownFlag = false;
+                    }
+
+            }
+        });
+        this.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                sbx = e.getX();
+                sby = e.getY();
+                if (hasClickedTowerFlag == true){
+                    test.setBounds(sbx-50,sby-90,100,100);
+                    test.repaint();
+//                    Tower t = new Tower(1, 140 + (((e.getX() - MAX_LEFT) / MAX_BGWIDTH) - 1) * 32,
+//                            170 + (((e.getY() - MAX_TOP) / MAX_BGWIDTH)) * 32,
+//                            MAX_BGWIDTH,MAX_BGWIDTH,Towers.size());
+                }
+            }
+        });
+
+
 
         moneytitile = new MyJlabel(this,"金币:",550,30,100,100);
         HPtitle = new MyJlabel(this,"血量:",550,100,100,100);
@@ -143,33 +235,37 @@ public class MainGameJframe extends JFrame  {
 
         this.tower = new MyImgJpanel("Image/tower.png");
         tower.setBounds(screenWidth-500,300,100,100);
+        jLayeredPane.add(tower,Integer.valueOf(300));
 
 
         tower.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         //炮塔光标
+        test.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         add(tower);
 
 
-        this.monster = new MyGif("Image/timg.gif",100,100);
-        monster.setBounds(5,64,100,100);
-        jLayeredPane.add(monster,Integer.valueOf(200));
-//        add(monster);
+
+//        this.monster = new MyImgJpanel("Image/test.png");
+//        monster.setBounds(5,64,100,100);
+//        jLayeredPane.add(monster,Integer.valueOf(200));
+
+
 
         tower.addMouseListener(new MouseAdapter() {
             //炮塔监听事件
             @Override
             public void mouseClicked(MouseEvent e) {
-                /*
-                 当炮塔被点击时
-                 生成炮塔线程
-                 */
+                test.setBounds(screenWidth-500,300,100,100);
+                jLayeredPane.add(test,Integer.valueOf(1000));
+                hasClickedTowerFlag = true;
+
 
 //                future = threadPool.submit(new Callable<Integer>() {
 //                    public Integer call() throws Exception {
 //                        return new Random().nextInt(100);
 //                    }
 //                });
-//                hasTowerFlag = true;
+//                hasTowerFlag = true;Press;
             }
         });
 
