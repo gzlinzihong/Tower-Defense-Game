@@ -2,6 +2,7 @@ package GameObject;
 
 import MyInterfaces.Moveable;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,16 +16,12 @@ import java.util.ArrayList;
  * @author 嘿 林梓鸿
  * @date 2019年 12月02日 23:36:32
  */
-public class Monster extends GameObject implements Runnable, Moveable, ComponentListener{
+public class Monster extends GameObject implements Runnable, Moveable{
     /**
      * MNUMS -> 怪物数量
      */
-    private final int MNUMS = 8;
+//    private final int MNUMS = 8;
 
-    /**
-     * path -> 图片路径
-     */
-    private String path;
     /**
      * monsterSpeed -> 怪物走动的速度,即线程刷新的快慢
      */
@@ -35,11 +32,63 @@ public class Monster extends GameObject implements Runnable, Moveable, Component
      */
     private int monsterSpeedDifference = 3;
 
-    private ArrayList<Monster> monsters = new ArrayList<Monster>();
+//    private ArrayList<Monster> monsters = new ArrayList<Monster>();
 
-    private int HP;
-    private int speed;
+    /**
+     * 怪物图标
+     */
+    private ImageIcon img;
+
+    /**
+     * path -> 图片路径
+     */
+    private String path;
+
+    /**
+     * 血量图的宽度
+     */
+    private int HPX=100;
+
+    /**
+     * 血量图的高度
+     */
+    private int HPY=6;
+
+    /**
+     * 怪物步数
+     */
     private int step = 3;
+
+
+    /**
+     * 血量图的路径
+     */
+    private String hpImgPath = "Image/hp.png";
+
+    /**
+     * 血量图
+     */
+    private ImageIcon hpImg ;
+
+    /**
+     * 血量图的x轴
+     */
+    private int hpImgX = 0;
+
+    /**
+     * 血量图的y轴
+     */
+    private int hpImgY = 0;
+
+
+
+    @Override
+    protected void paintComponent(Graphics g){
+        img = new ImageIcon(path);
+        hpImg = new ImageIcon(hpImgPath);
+        g.drawImage(img.getImage(),0,1,width,getHeight()-10,null);
+        g.drawImage(hpImg.getImage(),hpImgX,hpImgY,HPX,HPY,null);
+    }
 
 
 
@@ -48,6 +97,13 @@ public class Monster extends GameObject implements Runnable, Moveable, Component
         initParameter(path,monsterSpeed,width,height);
     }
 
+    /**
+     * 初始化变量
+     * @param path
+     * @param monsterSpeed
+     * @param width
+     * @param height
+     */
     public void initParameter(String path,int monsterSpeed,int width,int height){
         this.path = path;
         this.monsterSpeed = monsterSpeed;
@@ -59,12 +115,17 @@ public class Monster extends GameObject implements Runnable, Moveable, Component
         thread.start();
     }
 
-
     @Override
     public void run() {
         runMap();
     }
 
+    /**
+     * 跑地图
+     * flag = 1 向右跑
+     * flag = 2 向左跑
+     * flag = 3 想下跑
+     */
     public void runMap(){
         moveMonster(1050,step,1);
         moveMonster(140,step,3);
@@ -78,39 +139,44 @@ public class Monster extends GameObject implements Runnable, Moveable, Component
         this.setVisible(false);
     }
 
-    @Override
-    public void componentResized(ComponentEvent componentEvent) {
-
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent componentEvent) {
-        Component component = componentEvent.getComponent();
-
-    }
-
-    @Override
-    public void componentShown(ComponentEvent componentEvent) {
-
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent componentEvent) {
-
-    }
-
     /**
+     * 移动怪物
      * @param distance
      * @param step
      */
     public void moveMonster(int distance,int step,int flag){
         for (int i = 0;i<distance/step;i++){
             switch (flag){
-                case 1: this.setPath("Image/howl.png"); this.moveRight(i,step);break;
-                case 2: this.setPath("Image/howl2.png");this.moveLeft(i,step);break;
-                case 3: this.setPath("Image/howl1.png");this.moveDown(i,step);break;
+                case 1:
+                    hpImgX = 0;
+                    hpImgY = 0;
+                    HPX = 100;
+                    HPY = 10;
+                    path = "Image/howl.png" ;
+                    hpImgPath = "Image/hp.png";
+                    this.moveRight(i,step);
+                    break;
+                case 2:
+                    hpImgX = 0;
+                    hpImgY = 0;
+                    HPX = 100;
+                    HPY = 10;
+                    path = "Image/howl2.png" ;
+                    hpImgPath = "Image/hp2.png";
+                    this.moveLeft(i,step);
+                    break;
+                case 3:
+                    hpImgX = width-10;
+                    hpImgY = 0;
+                    HPX = 10;
+                    HPY = 100;
+                    path = "Image/howl3.png" ;
+                    hpImgPath = "Image/hp3.png";
+                    this.moveDown(i,step);
+                    break;
             }
             revalidate();
+            //这个方法是只重绘组件。解决图片闪烁问题。但偶尔会卡顿
             try {
                 Thread.sleep(monsterSpeed);
             } catch (InterruptedException e) {
@@ -118,6 +184,8 @@ public class Monster extends GameObject implements Runnable, Moveable, Component
             }
         }
     }
+
+
 
     @Override
     public void moveRight(int i,int step) {
