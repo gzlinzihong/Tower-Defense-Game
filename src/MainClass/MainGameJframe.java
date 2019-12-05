@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * 游戏界面
@@ -35,6 +35,16 @@ public class MainGameJframe extends JFrame  {
      * Towers -> 炮塔集合
      */
     ArrayList<JPanel> Towers = new ArrayList<>();
+
+    /**
+     * AllMonsters -> 所有怪物集合
+     */
+    Map<Integer,Monster> AllMonsters = new HashMap<>();
+
+    /**
+     * monsters -> 怪物集合
+     */
+    ArrayList<Monster> monsters = new ArrayList<>();
 
     /**
      * screenWidth -> 屏幕宽度
@@ -129,6 +139,7 @@ public class MainGameJframe extends JFrame  {
         public void run(){
             for (int i = 0;i<8;i++){
                 Monster monster1 = new Monster("Image/howl.png", monsterSpeed, 70, 70);
+                monsters.add(monster1);
                 jLayeredPane.add(monster1,Integer.valueOf(300));
                 try {
                     sleep(2000);
@@ -200,6 +211,9 @@ public class MainGameJframe extends JFrame  {
                     if (isPutDownFlag == true) {
 
                         Tower t = new Tower("Image/tower.png");
+                        for (Monster monster:monsters){
+                            monster.addBullets(t.getBullet());
+                        }
                         jLayeredPane.add(t,Integer.valueOf(2000));
                         t.setBounds(sbx-50,sby-90,100,100);
                         Towers.add(t);

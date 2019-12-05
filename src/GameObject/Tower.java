@@ -17,6 +17,20 @@ import java.io.BufferedReader;
 public class Tower extends GameObject implements Runnable{
 
     boolean isPutDownFlag = false;
+    private Bullet bullet;
+
+    public Bullet getBullet() {
+        return bullet;
+    }
+
+    public int getAD() {
+        return AD;
+    }
+
+    public void setAD(int AD) {
+        this.AD = AD;
+    }
+
     int AD;
     //攻击力
 

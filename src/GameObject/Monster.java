@@ -4,10 +4,6 @@ import MyInterfaces.Moveable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.util.ArrayList;
 
 /**
@@ -79,6 +75,16 @@ public class Monster extends GameObject implements Runnable, Moveable{
      * 血量图的y轴
      */
     private int hpImgY = 0;
+
+    /**
+     * 子弹集合
+     */
+    private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+
+    /**
+     * 碰撞监听器
+     */
+    private CrashDetection crashListener = new CrashDetection();
 
 
 
@@ -174,6 +180,7 @@ public class Monster extends GameObject implements Runnable, Moveable{
                     hpImgPath = "Image/hp3.png";
                     this.moveDown(i,step);
                     break;
+                default:this.crashListener.initObject(this,this.bullets);
             }
             revalidate();
             //这个方法是只重绘组件。解决图片闪烁问题。但偶尔会卡顿
@@ -203,5 +210,25 @@ public class Monster extends GameObject implements Runnable, Moveable{
     public void moveDown(int i,int step) {
         Y = Y+step;
         this.setBounds(X,Y,width,height);
+    }
+
+    public int getHPX() {
+        return HPX;
+    }
+
+    public void setHPX(int HPX) {
+        this.HPX = HPX;
+    }
+
+    public int getHPY() {
+        return HPY;
+    }
+
+    public void setHPY(int HPY) {
+        this.HPY = HPY;
+    }
+
+    public void addBullets(Bullet bullet){
+        this.bullets.add(bullet);
     }
 }
