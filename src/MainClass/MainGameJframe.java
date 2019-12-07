@@ -1,5 +1,6 @@
 package MainClass;
 
+import GameObject.Bullet;
 import GameObject.Monster;
 import GameObject.Tower;
 import MyClass.MyGif;
@@ -19,7 +20,15 @@ import java.util.*;
  * @date 2019年 11月25日 18:02:08
  */
 public class MainGameJframe extends JFrame  {
-
+    /**
+     * 常量
+     */
+    static final int MAX_LEFT = 143;// 可放置炮塔的最左部x值
+    static final int MAX_RIGHT = 1059;// 可放置炮塔的最右部x值
+    static final int MAX_TOP = 171;// 可放置炮塔的最顶部y值
+    static final int MAX_BOTTOM = 662;// 可放置炮塔的最底部y值
+    static final int MAX_BGWIDTH = 70;// 每个方块的像素长度
+    static final int RELATIVE_LOCATION = 141;  // 炮塔相对于左上角第一个塔座的距离
 
     /**
      * map -> 地图
@@ -137,8 +146,12 @@ public class MainGameJframe extends JFrame  {
     private class Drawing extends Thread{
         @Override
         public void run(){
-            for (int i = 0;i<8;i++){
-                Monster monster1 = new Monster("Image/howl.png", monsterSpeed, 70, 70);
+            for (int i = 0;i<16;i++){
+
+                /**
+                 * 怪物生成
+                 */
+                Monster monster1 = new Monster("Image/howl.png", monsterSpeed, MAX_BGWIDTH, MAX_BGWIDTH,monsters.size());
                 monsters.add(monster1);
                 jLayeredPane.add(monster1,Integer.valueOf(300));
                 try {
@@ -148,7 +161,14 @@ public class MainGameJframe extends JFrame  {
                 }
             }
 
-
+            while(monsters.size() > 0) {
+                for(int i = 0; i < monsters.size(); i++) {
+                    if (monsters.get(i).getDEATH() == 1) {
+                        monsters.remove(i);
+                        //System.out.println(monsters.size());
+                    }
+                }
+            }
         }
     }
 
@@ -205,18 +225,30 @@ public class MainGameJframe extends JFrame  {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                //System.out.println(134+ ((e.getX() - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH);
+
                 if (hasClickedTowerFlag == true) {
                     isPutDownFlag = true;
                 }
-                    if (isPutDownFlag == true) {
+                    if (isPutDownFlag == true && legalLocation(e.getX(),e.getY())) {
 
-                        Tower t = new Tower("Image/tower.png");
+                        /**
+                         * 生成炮塔
+                         */
+                        Tower t = new Tower("Image/tank1.png");
+                        t.setArray(monsters);
+                        Thread t1 = new Thread(t);
                         for (Monster monster:monsters){
                             monster.addBullets(t.getBullet());
                         }
                         jLayeredPane.add(t,Integer.valueOf(2000));
-                        t.setBounds(sbx-50,sby-90,100,100);
+                        setLocation(e.getX(),e.getY(),t);
                         Towers.add(t);
+                        t1.start();
+                        test.setBounds(screenWidth-500, 300, 100, 100);
+                        hasClickedTowerFlag = false;
+                        isPutDownFlag = false;
+                    } else {
                         test.setBounds(screenWidth-500, 300, 100, 100);
                         hasClickedTowerFlag = false;
                         isPutDownFlag = false;
@@ -319,4 +351,20 @@ public class MainGameJframe extends JFrame  {
 //
 //
 //    }
+    public void setLocation(int x,int  y, Tower t) {
+        t.setCenterXY(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0,RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0, MAX_BGWIDTH*1.5);
+        t.setBounds(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH, RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH, MAX_BGWIDTH,MAX_BGWIDTH);
+        //System.out.println(134+ ((x - MAX_LEFT) / MAX_BGWIDTH) * 32);
+    }
+
+    public Boolean legalLocation (int x, int y) {
+        if (x < MAX_RIGHT && x > MAX_LEFT && y > MAX_TOP && y < MAX_BOTTOM && (x - MAX_LEFT) / MAX_BGWIDTH % 2 == 0 && ((y - MAX_TOP) / MAX_BGWIDTH) % 2 == 0) {
+            return true;
+           //System.out.println(true);
+        } else {
+            return false;
+            //System.out.println(false);
+        }
+    }
+
 }

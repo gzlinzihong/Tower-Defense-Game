@@ -1,5 +1,7 @@
 package MyClass;
 
+import MainClass.MainGameJframe;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,6 +18,8 @@ public class MyImgJpanel extends JPanel {
     private Graphics gBuffer;
     public MyImgJpanel(String path){
         this.path = path;
+    }
+    public MyImgJpanel() {
     }
 
 

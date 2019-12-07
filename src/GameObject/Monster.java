@@ -4,6 +4,8 @@ import MyInterfaces.Moveable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
@@ -13,6 +15,11 @@ import java.util.ArrayList;
  * @date 2019年 12月02日 23:36:32
  */
 public class Monster extends GameObject implements Runnable, Moveable{
+    /**
+     * 怪物死亡标志
+     */
+    int DEATH = 0;
+
     /**
      * MNUMS -> 怪物数量
      */
@@ -34,6 +41,11 @@ public class Monster extends GameObject implements Runnable, Moveable{
      * 怪物图标
      */
     private ImageIcon img;
+
+    /**
+     * 怪物血量
+     */
+    private int hp = 100;
 
     /**
      * path -> 图片路径
@@ -87,19 +99,24 @@ public class Monster extends GameObject implements Runnable, Moveable{
     private CrashDetection crashListener = new CrashDetection();
 
 
+    private double Tower_x;
+    private double Tower_y;
+    private double Tower_r;
+
 
     @Override
     protected void paintComponent(Graphics g){
         img = new ImageIcon(path);
         hpImg = new ImageIcon(hpImgPath);
-        g.drawImage(img.getImage(),0,1,width,getHeight()-10,null);
+        g.drawImage(img.getImage(),0,1,(int)width,getHeight()-10,null);
         g.drawImage(hpImg.getImage(),hpImgX,hpImgY,HPX,HPY,null);
     }
 
 
 
-    public Monster(String path,int monsterSpeed,int width,int height) {
+    public Monster(String path,int monsterSpeed,int width,int height, int NUM) {
         super(path);
+        this.NUMBER = NUM;
         initParameter(path,monsterSpeed,width,height);
     }
 
@@ -119,6 +136,19 @@ public class Monster extends GameObject implements Runnable, Moveable{
         this.height = height;
         Thread thread = new Thread(this);
         thread.start();
+        this.createMouseAdapter();
+    }
+
+    public void createMouseAdapter(){
+        MouseAdapter adapter = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                hp -=100;
+                System.out.println(hp);
+            }
+        };
+        addMouseListener(adapter);
+        addMouseMotionListener(adapter);
     }
 
     @Override
@@ -142,6 +172,7 @@ public class Monster extends GameObject implements Runnable, Moveable{
         moveMonster(985,step,2);
         moveMonster(140,step,3);
         moveMonster(930,step,1);
+        this.DEATH = 1;
         this.setVisible(false);
     }
 
@@ -172,7 +203,7 @@ public class Monster extends GameObject implements Runnable, Moveable{
                     this.moveLeft(i,step);
                     break;
                 case 3:
-                    hpImgX = width-10;
+                    hpImgX = (int)width-10;
                     hpImgY = 0;
                     HPX = 10;
                     HPY = 100;
@@ -196,20 +227,35 @@ public class Monster extends GameObject implements Runnable, Moveable{
 
     @Override
     public void moveRight(int i,int step) {
-        X = X+step;
-        this.setBounds(X,Y,width,height);
+        if(hp < 1) {
+            this.DEATH = 1;
+            this.setVisible(false);
+        } else {
+            X = X + step;
+            this.setBounds((int) X, (int) Y, (int) width, (int) height);
+        }
     }
 
     @Override
     public void moveLeft(int i,int step) {
-        X = X-step;
-        this.setBounds(X,Y,width,height);
+        if(hp < 1) {
+            this.DEATH = 1;
+            this.setVisible(false);
+        } else {
+            X = X - step;
+            this.setBounds((int) X, (int) Y, (int) width, (int) height);
+        }
     }
 
     @Override
     public void moveDown(int i,int step) {
-        Y = Y+step;
-        this.setBounds(X,Y,width,height);
+        if(hp < 1) {
+            this.DEATH = 1;
+            this.setVisible(false);
+        } else {
+            Y = Y + step;
+            this.setBounds((int) X, (int) Y, (int) width, (int) height);
+        }
     }
 
     public int getHPX() {
@@ -230,5 +276,32 @@ public class Monster extends GameObject implements Runnable, Moveable{
 
     public void addBullets(Bullet bullet){
         this.bullets.add(bullet);
+    }
+
+    public void setTower(double x,double y, double r) {
+        this.Tower_x = x;
+        this.Tower_y = y;
+        this.Tower_r = r;
+        //System.out.println("怪物坐标"+ this.X+","+this.Y+",炮塔坐标："+ Tower_x +","+ Tower_y+","+ Tower_r);
+    }
+
+    public int getDEATH() {
+        return this.DEATH;
+    }
+
+    public int getHp(){
+        return this.hp;
+    }
+
+    @Override
+    public void getCenter() {
+        //System.out.println("怪物坐标"+ this.X+","+this.Y+",炮塔坐标："+ Tower_x +","+ Tower_y+","+ Tower_r);
+        //System.out.println("" + Math.sqrt(Math.pow((this.X - this.Tower_x), 2) + Math.pow(this.Y - this.Tower_y, 2)) + "," + (this.Tower_r + MAX_BGWIDTH*Math.sqrt(2)));
+        if(Math.sqrt(Math.pow((this.X - this.Tower_x), 2) + Math.pow(this.Y - this.Tower_y, 2)) <= (this.Tower_r + MAX_BGWIDTH*Math.sqrt(2))) {
+            this.hp -= 20;
+        }
+//        else {
+//            System.out.println("----");
+//        }
     }
 }
