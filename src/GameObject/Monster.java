@@ -162,17 +162,20 @@ public class Monster extends GameObject implements Runnable, Moveable{
      * flag = 2 向左跑
      * flag = 3 想下跑
      */
-    public void runMap(){
-        moveMonster(1050,step,1);
-        moveMonster(140,step,3);
-        moveMonster(985,step,2);
-        moveMonster(140,step,3);
-        moveMonster(985,step,1);
-        moveMonster(140,step,3);
-        moveMonster(985,step,2);
-        moveMonster(140,step,3);
-        moveMonster(930,step,1);
-        this.DEATH = 1;
+    public void runMap() {
+        while(this.DEATH != 1) {
+            moveMonster(1050, step, 1);
+            moveMonster(140, step, 3);
+            moveMonster(985, step, 2);
+            moveMonster(140, step, 3);
+            moveMonster(985, step, 1);
+            moveMonster(140, step, 3);
+            moveMonster(985, step, 2);
+            moveMonster(140, step, 3);
+            moveMonster(930, step, 1);
+            this.DEATH = 1;
+            break;
+        }
         this.setVisible(false);
     }
 
@@ -284,6 +287,10 @@ public class Monster extends GameObject implements Runnable, Moveable{
 
     public int getDEATH() {
         return this.DEATH;
+    }
+
+    public void setHp(int hp) {
+        this.hp -= hp;
     }
 
     public int getHp(){

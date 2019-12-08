@@ -163,7 +163,7 @@ public class MainGameJframe extends JFrame  {
     private class Drawing extends Thread{
         @Override
         public void run(){
-            for (int i = 0;i<1;i++){
+            for (int i = 0;i<8;i++){
 
                 /**
                  * 怪物生成
@@ -181,6 +181,7 @@ public class MainGameJframe extends JFrame  {
             while(monsters.size() > 0) {
                 for(int i = 0; i < monsters.size(); i++) {
                     if (monsters.get(i).getDEATH() == 1) {
+                        System.out.println("炮塔"+i+"被移除");
                         monsters.remove(i);
                         //System.out.println(monsters.size());
                     }
@@ -412,7 +413,7 @@ public class MainGameJframe extends JFrame  {
 //
 //    }
     public void setLocation(int x,int  y, Tower t) {
-        t.setCenterXY(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0,RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0, MAX_BGWIDTH*1.5);
+        t.setCenterXY(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0,RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0, MAX_BGWIDTH);
         t.setBounds(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH, RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH, MAX_BGWIDTH,MAX_BGWIDTH);
         //System.out.println(134+ ((x - MAX_LEFT) / MAX_BGWIDTH) * 32);
     }

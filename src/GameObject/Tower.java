@@ -33,6 +33,7 @@ public class Tower extends GameObject implements Runnable{
     private double degree;
     private Image iBuffer;
     private Graphics gBuffer;
+    private Monster m;
 
     public Bullet getBullet() {
         return bullet;
@@ -148,7 +149,8 @@ public class Tower extends GameObject implements Runnable{
              * 当怪物集合中有怪物时开始判断
              */
             if(monsters.size() > 0 ) {
-                for (int i = 0; i < monsters.size(); i++) {
+                int size = monsters.size();
+                for (int i = 0; i < size; i++) {
                     /**
                      * 將当前炮塔的x，y，r值放入每個怪物中
                      */
@@ -161,25 +163,36 @@ public class Tower extends GameObject implements Runnable{
                     /**
                      * 判断每个怪物是否在当前炮塔的攻击范围内
                      */
-//                    if(monsters.get(0).getCenter()){
-                        double linbian = Math.abs(monsters.get(0).getMonsterY()-this.Y);
-                        double duibian = Math.abs(monsters.get(0).getMonsterX()-this.X);
-                        if (monsters.get(0).getMonsterY() < this.Y  && monsters.get(0).getMonsterX() < this.X) {
-                            this.degree = (-1) * Math.atan(Math.abs(duibian/linbian));
+                    if(monsters.get(i).getCenter() && monsters.size() != 0){
+                        m = monsters.get(i);
+                        while(monsters.size() > 0 && m.getHp() != 0 && m.getCenter()) {
+                            double linbian = Math.abs(m.getMonsterY() - this.Y);
+                            double duibian = Math.abs(m.getMonsterX() - this.X);
+                            if (m.getMonsterY() < this.Y && m.getMonsterX() < this.X) {
+                                this.degree = (-1) * Math.atan(Math.abs(duibian / linbian));
+                            } else if (m.getMonsterY() < this.Y && m.getMonsterX() > this.X) {
+                                this.degree = Math.atan(Math.abs(duibian / linbian));
+                            } else if (m.getMonsterY() > this.Y && m.getMonsterX() > this.X) {
+                                this.degree = Math.PI - Math.atan(Math.abs(duibian / linbian));
+                            } else if (m.getMonsterY() > this.Y && m.getMonsterX() < this.X) {
+                                this.degree = Math.PI + Math.atan(Math.abs(duibian / linbian));
+                            }
+                            this.paintComponent(super.getGraphics());
+                            m.setHp(10);
+                            i = 0;
+                            size = 0;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
-                        else if (monsters.get(0).getMonsterY() < this.Y && monsters.get(0).getMonsterX() > this.X) {
-                            this.degree = Math.atan(Math.abs(duibian/linbian));
-                        }
-                        else if (monsters.get(0).getMonsterY() > this.Y && monsters.get(0).getMonsterX() > this.X) {
-                            this.degree = Math.PI - Math.atan(Math.abs(duibian/linbian));
-                        }
-                        else if (monsters.get(0).getMonsterY() > this.Y && monsters.get(0).getMonsterX() < this.X){
-                            this.degree = Math.PI + Math.atan(Math.abs(duibian/linbian));
-                        }
-                           this.paintComponent(super.getGraphics());
-                        }
+                    } else {
+                        this.degree = 0;
+                        this.paintComponent(super.getGraphics());
+                    }
 //                        Math.abs(monsters.get(i).getMonsterY()-this.Y)/ Math.abs(monsters.get(i).getMonsterX()-this.X)
-//                    }
+                }
 //                    double linbian = Math.abs(monsters.get(0).getMonsterY()-this.Y + MAX_BGWIDTH /2);
 //                    double duibian = Math.abs(monsters.get(0).getMonsterX()-this.X + MAX_BGWIDTH /2);
 //                    this.degree = Math.atan(Math.abs(duibian/linbian));
@@ -197,19 +210,20 @@ public class Tower extends GameObject implements Runnable{
                     }
                 }
             else {
-                for(Monster m : monsters) {
-                    //m.setTower((int)this.X,(int)this.Y,this.R);
-//                    if (m.getCenter(this.X,this.Y,this.R)) {
-//                        number++;
-//                        System.out.println(this.Num+"号炮塔发现"+number+"个敌人");
+                this.degree = 0;
+//                for(Monster m : monsters) {
+//                    //m.setTower((int)this.X,(int)this.Y,this.R);
+////                    if (m.getCenter(this.X,this.Y,this.R)) {
+////                        number++;
+////                        System.out.println(this.Num+"号炮塔发现"+number+"个敌人");
+////                    }
+//                    m.getCenter();
+//                    try {
+//                        Thread.sleep(200);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
 //                    }
-                    m.getCenter();
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                }
             }
         }
     }
