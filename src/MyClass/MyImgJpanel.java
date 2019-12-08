@@ -12,6 +12,7 @@ import java.awt.*;
  * @date 2019年 11月25日 17:56:04
  */
 public class MyImgJpanel extends JPanel {
+    private double degree;
     private String path;
     private ImageIcon img;
     private Image iBuffer;

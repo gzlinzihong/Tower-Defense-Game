@@ -50,6 +50,7 @@ public class Bullet extends GameObject implements Runnable{
 
     @Override
     public void paint(Graphics g) {
-
+        g.drawRect(0,0,20,100);
+        g.setColor(Color.RED);
     }
 }

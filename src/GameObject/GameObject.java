@@ -41,9 +41,8 @@ public class GameObject extends MyImgJpanel {
 //        }
 //    }
 
-    public void getCenter() {
-
+    public boolean getCenter() {
+        return true;
     }
-
 
 }

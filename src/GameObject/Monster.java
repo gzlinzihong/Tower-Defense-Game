@@ -28,7 +28,7 @@ public class Monster extends GameObject implements Runnable, Moveable{
     /**
      * monsterSpeed -> 怪物走动的速度,即线程刷新的快慢
      */
-    private int monsterSpeed = 20;
+    private int monsterSpeed = 50;
 
     /**
      * monsterSpeedDifference -> 怪物一波比一波快的差值
@@ -65,7 +65,7 @@ public class Monster extends GameObject implements Runnable, Moveable{
     /**
      * 怪物步数
      */
-    private int step = 3;
+    private int step = 1;
 
 
     /**
@@ -81,12 +81,12 @@ public class Monster extends GameObject implements Runnable, Moveable{
     /**
      * 血量图的x轴
      */
-    private int hpImgX = 0;
+    private int hpImgX = 10;
 
     /**
      * 血量图的y轴
      */
-    private int hpImgY = 0;
+    private int hpImgY = 10;
 
     /**
      * 子弹集合
@@ -108,8 +108,8 @@ public class Monster extends GameObject implements Runnable, Moveable{
     protected void paintComponent(Graphics g){
         img = new ImageIcon(path);
         hpImg = new ImageIcon(hpImgPath);
-        g.drawImage(img.getImage(),0,1,(int)width,getHeight()-10,null);
-        g.drawImage(hpImg.getImage(),hpImgX,hpImgY,HPX,HPY,null);
+        g.drawImage(img.getImage(),10,20,(int)width-10,getHeight()-20,null);
+        g.drawImage(hpImg.getImage(),hpImgX,hpImgY,hp-10,HPY,null);
     }
 
 
@@ -185,30 +185,27 @@ public class Monster extends GameObject implements Runnable, Moveable{
         for (int i = 0;i<distance/step;i++){
             switch (flag){
                 case 1:
-                    hpImgX = 0;
-                    hpImgY = 0;
-                    HPX = 100;
+
+                    HPX = hp;
                     HPY = 10;
-                    path = "Image/howl.png" ;
+                    path = "Image/tank.png" ;
                     hpImgPath = "Image/hp.png";
                     this.moveRight(i,step);
                     break;
                 case 2:
-                    hpImgX = 0;
-                    hpImgY = 0;
-                    HPX = 100;
+
+                    HPX = hp;
                     HPY = 10;
-                    path = "Image/howl2.png" ;
-                    hpImgPath = "Image/hp2.png";
+                    path = "Image/tank2.png" ;
+                    hpImgPath = "Image/hp.png";
                     this.moveLeft(i,step);
                     break;
                 case 3:
-                    hpImgX = (int)width-10;
-                    hpImgY = 0;
-                    HPX = 10;
-                    HPY = 100;
-                    path = "Image/howl3.png" ;
-                    hpImgPath = "Image/hp3.png";
+
+                    HPX = hp;
+                    HPY = 10;
+                    path = "Image/tank3.png" ;
+                    hpImgPath = "Image/hp.png";
                     this.moveDown(i,step);
                     break;
                 default:this.crashListener.initObject(this,this.bullets);
@@ -294,14 +291,22 @@ public class Monster extends GameObject implements Runnable, Moveable{
     }
 
     @Override
-    public void getCenter() {
+    public boolean getCenter() {
         //System.out.println("怪物坐标"+ this.X+","+this.Y+",炮塔坐标："+ Tower_x +","+ Tower_y+","+ Tower_r);
         //System.out.println("" + Math.sqrt(Math.pow((this.X - this.Tower_x), 2) + Math.pow(this.Y - this.Tower_y, 2)) + "," + (this.Tower_r + MAX_BGWIDTH*Math.sqrt(2)));
-        if(Math.sqrt(Math.pow((this.X - this.Tower_x), 2) + Math.pow(this.Y - this.Tower_y, 2)) <= (this.Tower_r + MAX_BGWIDTH*Math.sqrt(2))) {
-            this.hp -= 20;
+        if (Math.sqrt(Math.pow((this.X - this.Tower_x), 2) + Math.pow(this.Y - this.Tower_y, 2)) <= (this.Tower_r + MAX_BGWIDTH * Math.sqrt(2))) {
+            return true;
         }
-//        else {
-//            System.out.println("----");
-//        }
+        else {
+           return false;
+        }
     }
+
+    public double getMonsterX(){
+        return this.X + MAX_BGWIDTH / 2;
+    }
+    public double getMonsterY(){
+        return this.Y + MAX_BGWIDTH / 2;
+    }
+
 }

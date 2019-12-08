@@ -1,9 +1,9 @@
 package MainClass;
 
 import GameObject.Bullet;
+import GameObject.FireBall;
 import GameObject.Monster;
 import GameObject.Tower;
-import MyClass.MyGif;
 import MyClass.MyImgJpanel;
 import MyClass.MyJlabel;
 
@@ -103,12 +103,28 @@ public class MainGameJframe extends JFrame  {
     /**
      * hasClickedTowerFlag -> 是否点击炮塔标记
      */
-    boolean hasClickedTowerFlag = false;
+    boolean towerHasClickedTowerFlag = false;
 
     /**
      * isPutDownFlag -> 是否将炮塔放下标记
      */
-    boolean isPutDownFlag = false;
+    boolean towerIsPutDownFlag = false;
+
+    /**
+     * hasClickedTowerFlag -> 是否点击炮塔标记
+     */
+
+    /**
+     * test -> 工具人图片
+     */
+    private MyImgJpanel fireBalltest = new MyImgJpanel("Image/MagicCircle.png");
+
+    boolean fireBallHasClickedTowerFlag = false;
+
+    /**
+     * isPutDownFlag -> 是否将炮塔放下标记
+     */
+    boolean fireBallIsPutDownFlag = false;
 
     /**
      * monsterInterval -> 怪物出现的时间间隔,由窗口1传递过来。默认为一般
@@ -123,6 +139,7 @@ public class MainGameJframe extends JFrame  {
      */
     private int monsterSpeed = 20;
 
+    private MyImgJpanel fireball ;
 
 
 //    private boolean hasTowerFlag = false;
@@ -146,14 +163,14 @@ public class MainGameJframe extends JFrame  {
     private class Drawing extends Thread{
         @Override
         public void run(){
-            for (int i = 0;i<16;i++){
+            for (int i = 0;i<1;i++){
 
                 /**
                  * 怪物生成
                  */
-                Monster monster1 = new Monster("Image/howl.png", monsterSpeed, MAX_BGWIDTH, MAX_BGWIDTH,monsters.size());
+                Monster monster1 = new Monster("Image/tank.png", monsterSpeed, MAX_BGWIDTH, MAX_BGWIDTH,monsters.size());
                 monsters.add(monster1);
-                jLayeredPane.add(monster1,Integer.valueOf(300));
+                jLayeredPane.add(monster1,Integer.valueOf(800));
                 try {
                     sleep(2000);
                 } catch (InterruptedException e) {
@@ -226,48 +243,13 @@ public class MainGameJframe extends JFrame  {
             @Override
             public void mouseClicked(MouseEvent e) {
                 //System.out.println(134+ ((e.getX() - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH);
-
-                if (hasClickedTowerFlag == true) {
-                    isPutDownFlag = true;
-                }
-                    if (isPutDownFlag == true && legalLocation(e.getX(),e.getY())) {
-
-                        /**
-                         * 生成炮塔
-                         */
-                        Tower t = new Tower("Image/tank1.png");
-                        t.setArray(monsters);
-                        Thread t1 = new Thread(t);
-                        for (Monster monster:monsters){
-                            monster.addBullets(t.getBullet());
-                        }
-                        jLayeredPane.add(t,Integer.valueOf(2000));
-                        setLocation(e.getX(),e.getY(),t);
-                        Towers.add(t);
-                        t1.start();
-                        test.setBounds(screenWidth-500, 300, 100, 100);
-                        hasClickedTowerFlag = false;
-                        isPutDownFlag = false;
-                    } else {
-                        test.setBounds(screenWidth-500, 300, 100, 100);
-                        hasClickedTowerFlag = false;
-                        isPutDownFlag = false;
-                    }
-
+                jframeClick(e);
             }
         });
         this.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                sbx = e.getX();
-                sby = e.getY();
-                if (hasClickedTowerFlag == true){
-                    test.setBounds(sbx-50,sby-90,100,100);
-                    test.repaint();
-//                    Tower t = new Tower(1, 140 + (((e.getX() - MAX_LEFT) / MAX_BGWIDTH) - 1) * 32,
-//                            170 + (((e.getY() - MAX_TOP) / MAX_BGWIDTH)) * 32,
-//                            MAX_BGWIDTH,MAX_BGWIDTH,Towers.size());
-                }
+               jframeMover(e);
             }
         });
 
@@ -278,32 +260,37 @@ public class MainGameJframe extends JFrame  {
         money = new MyJlabel(this,"0",400,30,100,100);
         HP = new MyJlabel(this,"100",400,100,100,100);
 
+        fireball = new MyImgJpanel("Image/rock.png");
+        fireball.setBounds(screenWidth-500,500,100,100);
+        jLayeredPane.add(fireball,Integer.valueOf(400));
+        fireball.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+        fireball.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                jLayeredPane.add(fireBalltest,Integer.valueOf(600));
+                fireBallHasClickedTowerFlag = true;
+
+            }
+        });
+
 
         this.tower = new MyImgJpanel("Image/tower.png");
         tower.setBounds(screenWidth-500,300,100,100);
-        jLayeredPane.add(tower,Integer.valueOf(300));
+        jLayeredPane.add(tower,Integer.valueOf(700));
 
 
         tower.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         //炮塔光标
-        test.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         add(tower);
-
-
-
-//        this.monster = new MyImgJpanel("Image/test.png");
-//        monster.setBounds(5,64,100,100);
-//        jLayeredPane.add(monster,Integer.valueOf(200));
-
 
 
         tower.addMouseListener(new MouseAdapter() {
             //炮塔监听事件
             @Override
             public void mouseClicked(MouseEvent e) {
-                test.setBounds(screenWidth-500,300,100,100);
                 jLayeredPane.add(test,Integer.valueOf(1000));
-                hasClickedTowerFlag = true;
+                towerHasClickedTowerFlag = true;
 
 
 //                future = threadPool.submit(new Callable<Integer>() {
@@ -320,6 +307,79 @@ public class MainGameJframe extends JFrame  {
 
 
 
+    }
+    public void jframeClick(MouseEvent e){
+        if (towerHasClickedTowerFlag == true) {
+            towerIsPutDownFlag = true;
+            if (towerIsPutDownFlag == true && legalLocation(e.getX(),e.getY())) {
+
+                /**
+                 * 生成炮塔
+                 */
+                Tower t = new Tower("Image/tank4.png");
+                t.setArray(monsters);
+                Thread t1 = new Thread(t);
+                for (Monster monster:monsters){
+                    monster.addBullets(t.getBullet());
+                }
+//            Bullet bullet = new Bullet(10,10);
+//            t.setBullet(bullet);
+//            bullet.setBounds(0,0,100,200);
+//            jLayeredPane.add(bullet,Integer.valueOf(2001));
+                jLayeredPane.add(t,Integer.valueOf(2000));
+                setLocation(e.getX(),e.getY(),t);
+                Towers.add(t);
+                t1.start();
+                test.setBounds(0, 0, 0, 0);
+                towerHasClickedTowerFlag = false;
+                towerIsPutDownFlag = false;
+            } else {
+                test.setBounds(0, 0, 0, 0);
+                towerHasClickedTowerFlag = false;
+                towerIsPutDownFlag = false;
+            }
+        }
+
+        if (fireBallHasClickedTowerFlag == true) {
+            fireBallIsPutDownFlag = true;
+            if (fireBallIsPutDownFlag == true) {
+                fireBalltest.setBounds(sbx-140,sby-100,250,120);
+                    fireball = new FireBall(fireBalltest,e.getX()-140,e.getY()-100);
+                    jLayeredPane.add(fireball,Integer.valueOf(1001));
+//                fireball = new FireBall(fireBalltest,e.getX()-140,e.getY()-100);
+//                jLayeredPane.add(fireball,Integer.valueOf(1001));
+//            Bullet bullet = new Bullet(10,10);
+//            t.setBullet(bullet);
+//            bullet.setBounds(0,0,100,200);
+//            jLayeredPane.add(bullet,Integer.valueOf(2001));
+//                jLayeredPane.add(t,Integer.valueOf(2000));
+//                test.setBounds(0, 0, 0, 0);
+                fireBallHasClickedTowerFlag = false;
+                fireBallIsPutDownFlag = false;
+            } else {
+//                test.setBounds(0, 0, 0, 0);
+//                towerHasClickedTowerFlag = false;
+//                towerIsPutDownFlag = false;
+            }
+        }
+
+    }
+
+    public void jframeMover(MouseEvent e){
+        sbx = e.getX();
+        sby = e.getY();
+        if (towerHasClickedTowerFlag == true){
+            test.setBounds(sbx-50,sby-90,100,100);
+            test.repaint();
+//                    Tower t = new Tower(1, 140 + (((e.getX() - MAX_LEFT) / MAX_BGWIDTH) - 1) * 32,
+//                            170 + (((e.getY() - MAX_TOP) / MAX_BGWIDTH)) * 32,
+//                            MAX_BGWIDTH,MAX_BGWIDTH,Towers.size());
+        }
+
+        if (fireBallHasClickedTowerFlag == true){
+            fireBalltest.setBounds(sbx-140,sby-100,250,120);
+            fireBalltest.repaint();
+        }
     }
 
     /**
