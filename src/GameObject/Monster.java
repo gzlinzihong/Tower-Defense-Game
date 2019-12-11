@@ -28,7 +28,7 @@ public class Monster extends GameObject implements Runnable, Moveable{
     /**
      * monsterSpeed -> 怪物走动的速度,即线程刷新的快慢
      */
-    private int monsterSpeed = 50;
+    private long monsterSpeed = 5000;
 
     /**
      * monsterSpeedDifference -> 怪物一波比一波快的差值
@@ -136,20 +136,8 @@ public class Monster extends GameObject implements Runnable, Moveable{
         this.height = height;
         Thread thread = new Thread(this);
         thread.start();
-        this.createMouseAdapter();
     }
 
-    public void createMouseAdapter(){
-        MouseAdapter adapter = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                hp -=100;
-                System.out.println(hp);
-            }
-        };
-        addMouseListener(adapter);
-        addMouseMotionListener(adapter);
-    }
 
     @Override
     public void run() {
@@ -213,9 +201,11 @@ public class Monster extends GameObject implements Runnable, Moveable{
                     break;
                 default:this.crashListener.initObject(this,this.bullets);
             }
-            revalidate();
+//            revalidate();
             //这个方法是只重绘组件。解决图片闪烁问题。但偶尔会卡顿
             try {
+//                System.out.println(X);
+//                System.out.println(monsterSpeed);
                 Thread.sleep(monsterSpeed);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -256,6 +246,10 @@ public class Monster extends GameObject implements Runnable, Moveable{
             Y = Y + step;
             this.setBounds((int) X, (int) Y, (int) width, (int) height);
         }
+    }
+    @Override
+    public Rectangle getRect() {
+        return new Rectangle((int)X,(int)Y,(int)width-20,(int)height-20);
     }
 
     public int getHPX() {

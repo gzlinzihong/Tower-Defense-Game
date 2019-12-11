@@ -1,5 +1,6 @@
 package GameObject;
 
+import MyClass.GameMusic;
 import MyClass.MyImgJpanel;
 import javafx.scene.shape.Circle;
 
@@ -47,7 +48,7 @@ public class Tower extends GameObject implements Runnable{
         this.AD = AD;
     }
 
-    int AD;
+    int AD = 20;
     //攻击力
 
     double R;
@@ -61,6 +62,7 @@ public class Tower extends GameObject implements Runnable{
     int number;
 
     ArrayList<Monster> monsters;
+    private int size;
 
 
 //    ImageIcon Img = new ImageIcon("Image/tower.png");
@@ -72,7 +74,6 @@ public class Tower extends GameObject implements Runnable{
     public Tower (String path) {
         super(path);
         this.path = path;
-        this.AD = AD;
         this.addListener();
 ////        super();
 //        this.Level = level;
@@ -117,10 +118,12 @@ public class Tower extends GameObject implements Runnable{
 
     public void setBullet(Bullet bullet) {
         this.bullet = bullet;
+        this.bullet.setXY((int)this.X,(int)this.Y);
     }
 
     public void setArray(ArrayList<Monster> monsters) {
         this.monsters = monsters;
+         size= monsters.size();
     }
 
 
@@ -129,7 +132,6 @@ public class Tower extends GameObject implements Runnable{
         this.X = x;
         this.Y = y;
         this.R = r;
-        System.out.println(this.X);
     }
 
     public void addListener(){
@@ -144,55 +146,67 @@ public class Tower extends GameObject implements Runnable{
     @Override
     public void run() {
         while (true) {
-//            this.bullet.setBounds((int)(X+=20),(int)(Y+=20),100,200);
             /**
              * 当怪物集合中有怪物时开始判断
              */
             if(monsters.size() > 0 ) {
-                int size = monsters.size();
-                for (int i = 0; i < size; i++) {
-                    /**
-                     * 將当前炮塔的x，y，r值放入每個怪物中
-                     */
-                    monsters.get(i).setTower(X, Y, R);
-                    //m.setTower((int)this.X,(int)this.Y,this.R);
+                size = monsters.size();
+                    for (int i = 0; i < monsters.size(); i++) {
+                        /**
+                         * 將当前炮塔的x，y，r值放入每個怪物中
+                         */
+                        monsters.get(i).setTower(X, Y, R);
+                        //m.setTower((int)this.X,(int)this.Y,this.R);
 //                    if (m.getCenter(this.X,this.Y,this.R)) {
 //                        number++;
 //                        System.out.println(this.Num+"号炮塔发现"+number+"个敌人");
 //                    }
-                    /**
-                     * 判断每个怪物是否在当前炮塔的攻击范围内
-                     */
-                    if(monsters.get(i).getCenter() && monsters.size() != 0){
-                        m = monsters.get(i);
-                        while(monsters.size() > 0 && m.getHp() != 0 && m.getCenter()) {
+                        /**
+                         * 判断每个怪物是否在当前炮塔的攻击范围内
+                         */
+                        if (monsters.get(i).getCenter() && monsters.size() != 0) {
+                            m = monsters.get(i);
                             double linbian = Math.abs(m.getMonsterY() - this.Y);
                             double duibian = Math.abs(m.getMonsterX() - this.X);
-                            if (m.getMonsterY() < this.Y && m.getMonsterX() < this.X) {
-                                this.degree = (-1) * Math.atan(Math.abs(duibian / linbian));
-                            } else if (m.getMonsterY() < this.Y && m.getMonsterX() > this.X) {
-                                this.degree = Math.atan(Math.abs(duibian / linbian));
-                            } else if (m.getMonsterY() > this.Y && m.getMonsterX() > this.X) {
-                                this.degree = Math.PI - Math.atan(Math.abs(duibian / linbian));
-                            } else if (m.getMonsterY() > this.Y && m.getMonsterX() < this.X) {
-                                this.degree = Math.PI + Math.atan(Math.abs(duibian / linbian));
+                            double xiebian = Math.sqrt(linbian * linbian + duibian * duibian);
+                            while (monsters.size() > 0 && m.getHp() != 0 && m.getCenter()) {
+                                if (m.getMonsterY() < this.Y && m.getMonsterX() < this.X) {
+                                    this.degree = (-1) * Math.atan(Math.abs(duibian / linbian));
+                                } else if (m.getMonsterY() < this.Y && m.getMonsterX() > this.X) {
+                                    this.degree = Math.atan(Math.abs(duibian / linbian));
+                                } else if (m.getMonsterY() > this.Y && m.getMonsterX() > this.X) {
+                                    this.degree = Math.PI - Math.atan(Math.abs(duibian / linbian));
+                                } else if (m.getMonsterY() > this.Y && m.getMonsterX() < this.X) {
+                                    this.degree = Math.PI + Math.atan(Math.abs(duibian / linbian));
+                                }
+                                this.paintComponent(this.getGraphics());
+                                this.bullet.setAD(AD);
+                                if (this.bullet.getFlag() == true) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            GameMusic.Play("bgm/shot.wav");
+                                        }
+                                    }).start();
+                                    this.bullet.setXY((int) this.X, (int) this.Y);
+                                    this.bullet.setMonster(m);
+                                    this.bullet.setVisible(true);
+                                    this.bullet.startAD();
+                                }
+                                i = 0;
+                                size = 0;
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                             }
+                        } else {
+                            this.degree = 0;
                             this.paintComponent(super.getGraphics());
-                            m.setHp(10);
-                            i = 0;
-                            size = 0;
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
                         }
-                    } else {
-                        this.degree = 0;
-                        this.paintComponent(super.getGraphics());
-                    }
 //                        Math.abs(monsters.get(i).getMonsterY()-this.Y)/ Math.abs(monsters.get(i).getMonsterX()-this.X)
-                }
+                    }
 //                    double linbian = Math.abs(monsters.get(0).getMonsterY()-this.Y + MAX_BGWIDTH /2);
 //                    double duibian = Math.abs(monsters.get(0).getMonsterX()-this.X + MAX_BGWIDTH /2);
 //                    this.degree = Math.atan(Math.abs(duibian/linbian));
@@ -204,11 +218,12 @@ public class Tower extends GameObject implements Runnable{
 //                    repaint();
 //                    }
                     try {
-                        Thread.sleep(30);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+
             else {
                 this.degree = 0;
 //                for(Monster m : monsters) {
@@ -225,6 +240,7 @@ public class Tower extends GameObject implements Runnable{
 //                    }
 //                }
             }
+
         }
     }
 }

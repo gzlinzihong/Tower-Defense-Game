@@ -1,5 +1,8 @@
 package GameObject;
 
+import MyClass.GameMusic;
+
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -9,48 +12,94 @@ import java.awt.*;
  * @date 2019年 12月05日 11:24:13
  */
 public class Bullet extends GameObject implements Runnable{
-    private double degree;
-    int test_X;
-    int test_Y;
-    public Bullet(int x, int y) {
+    private ImageIcon img = new ImageIcon("Image/AD.png");
+    private double speedX;
+    private double speedY;
+    private boolean flag = true;
+    private int AD;
+    private int speed = 4;
+
+
+    private Monster monster;
+    public Bullet() {
         super();
-        this.test_X = x;
-        this.test_Y = y;
-        this.X = 10;
-        this.Y = 10;
+        this.width=50;
+        this.height=50;
     }
 
-    public void setDegree(double degree) {
-        this.degree = degree;
+    public void setAD(int AD) {
+        this.AD = AD;
     }
 
-//    @Override
-//    public void paint(Graphics g) {
-//        Color c = g.getColor();
-//        super.paint(g);
-//        g.fillRect(X,Y,5,10);
-//        g.setColor(Color.RED);
-//        g.setColor(c);
-//    }
+    public void setXY(int x, int y ){
+        this.X = x;
+        this.Y = y-20;
+    }
+    public boolean getFlag() {
+        return flag;
+    }
+
+    public void setMonster(Monster monster) {
+        this.monster = monster;
+    }
 
     @Override
     public void run() {
-            this.X += 1;
-            this.Y += 1;
-            System.out.println(this.X+","+this.Y);
-            repaint();
+        this.setBounds((int)this.X,(int)this.Y,(int)width,(int)height);
+        while (this.getRect().intersects(monster.getRect())==false){
+            flag = false;
+            double dis = Math.sqrt(Math.pow((monster.getMonsterX()-this.X), 2) + Math.pow((monster.getMonsterY() - this.Y), 2));
+            double angleX = (monster.getMonsterX() - this.X)/dis;
+            double angleY = (monster.getMonsterY() - this.Y)/dis;
+            speedX = speed * angleX;
+            speedY = speed * angleY;
+            this.X += this.speedX;
+            this.Y += this.speedY;
+            this.setBounds((int)this.X,(int)this.Y,(int)width,(int)height);
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if (monster.getHp()<1){
+            monster = null;
+            flag = true;
+            this.setVisible(false);
+        }
+        else {
+            monster.setHp(AD);
+            monster = null;
+            flag = true;
+            this.setVisible(false);
+        }
+
+    }
+    public void startAD(){
+        new Thread(this).start();
     }
 
-//    public void test() {
-//        while(this.X < test_X) {
-//            this.X += 10;
-//            System.out.println(this.X);
-//        }
-//    }
+    @Override
+    public Rectangle getRect() {
+        return new Rectangle((int)X,(int)Y,(int)width-20,(int)height-20);
+    }
+
+
 
     @Override
-    public void paint(Graphics g) {
-        g.drawRect(0,0,20,100);
-        g.setColor(Color.RED);
+    protected void paintComponent(Graphics g) {
+        g.drawImage(img.getImage(),0,0,getWidth(),getHeight(),null);
+    }
+
+    @Override
+    public void update(Graphics scr){
+//        img = new ImageIcon(path);
+//        iBuffer=createImage(getWidth(),getHeight());
+//
+//        gBuffer=iBuffer.getGraphics();
+//        gBuffer = (Graphics2D)gBuffer;
+//        gBuffer.drawImage(img.getImage(),0,0,getWidth(),getHeight(),null);
+        this.paintComponent(scr);
+
     }
 }

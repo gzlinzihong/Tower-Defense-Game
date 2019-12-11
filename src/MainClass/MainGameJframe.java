@@ -4,6 +4,7 @@ import GameObject.Bullet;
 import GameObject.FireBall;
 import GameObject.Monster;
 import GameObject.Tower;
+import MyClass.GameMusic;
 import MyClass.MyImgJpanel;
 import MyClass.MyJlabel;
 
@@ -137,7 +138,7 @@ public class MainGameJframe extends JFrame  {
     /**
      * monsterSpeed -> 怪物走动的速度,即线程刷新的快慢
      */
-    private int monsterSpeed = 20;
+    private int monsterSpeed = 1000;
 
     private MyImgJpanel fireball ;
 
@@ -163,7 +164,7 @@ public class MainGameJframe extends JFrame  {
     private class Drawing extends Thread{
         @Override
         public void run(){
-            for (int i = 0;i<8;i++){
+            for (int i = 0;i<20;i++){
 
                 /**
                  * 怪物生成
@@ -197,6 +198,15 @@ public class MainGameJframe extends JFrame  {
         this.monsterInterval = monsterInterval;
         this.monsterSpeed = monsterSpeed;
         this.initComponents();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    GameMusic.Play("bgm/bgm.wav");
+                }
+
+            }
+        }).start();
 
         /**
          * 生成怪物线程
@@ -323,10 +333,11 @@ public class MainGameJframe extends JFrame  {
                 for (Monster monster:monsters){
                     monster.addBullets(t.getBullet());
                 }
-//            Bullet bullet = new Bullet(10,10);
-//            t.setBullet(bullet);
-//            bullet.setBounds(0,0,100,200);
-//            jLayeredPane.add(bullet,Integer.valueOf(2001));
+            Bullet bullet = new Bullet();
+            t.setBullet(bullet);
+            bullet.setBounds(0,0,30,30);
+            bullet.setVisible(false);
+            jLayeredPane.add(bullet,Integer.valueOf(2001));
                 jLayeredPane.add(t,Integer.valueOf(2000));
                 setLocation(e.getX(),e.getY(),t);
                 Towers.add(t);
