@@ -1,5 +1,6 @@
 package GameObject;
 
+import MainClass.MainGameJframe;
 import MyClass.GameMusic;
 import MyClass.MyImgJpanel;
 import javafx.scene.shape.Circle;
@@ -26,6 +27,11 @@ public class Tower extends GameObject implements Runnable{
 
 
 
+    boolean updateflag = false;//更新面板的显示信号
+    boolean removeflag = false;// 移除面板的显示信号
+    UpdatePanel updatePanel;
+    RemovePanel removePanel;
+    volatile private boolean DEATHFLAG = false; //炮塔移除的信号
 
     boolean isPutDownFlag = false;
     private ImageIcon img;
@@ -75,6 +81,7 @@ public class Tower extends GameObject implements Runnable{
         super(path);
         this.path = path;
         this.addListener();
+        this.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 ////        super();
 //        this.Level = level;
 //        if(level == 1) {
@@ -116,6 +123,29 @@ public class Tower extends GameObject implements Runnable{
         this.paintComponent(scr);
     }
 
+    /**
+     * 升级按钮初始化
+     * @param updatePanel
+     */
+    public void setUpdatePanel(UpdatePanel updatePanel) {
+        this.updatePanel = updatePanel;
+        this.updatePanel.setT(this);
+        this.updatePanel.setBounds((int)X + MAX_BGWIDTH / 2,(int)Y - 50 - 2,MAX_BGWIDTH - 20,MAX_BGWIDTH - 20);
+        this.updatePanel.setVisible(updateflag);
+    }
+
+    /**
+     * 移除模块初始化
+     * @param removePanel
+     */
+    public void setRemovePanel(RemovePanel removePanel) {
+        this.removePanel = removePanel;
+        this.removePanel.setT(this);
+        this.removePanel.setBounds((int)X + MAX_BGWIDTH / 2,(int)Y + 2,MAX_BGWIDTH - 20,MAX_BGWIDTH - 20);
+        this.removePanel.setVisible(removeflag);
+    }
+
+
     public void setBullet(Bullet bullet) {
         this.bullet = bullet;
         this.bullet.setXY((int)this.X,(int)this.Y);
@@ -134,42 +164,54 @@ public class Tower extends GameObject implements Runnable{
         this.R = r;
     }
 
+    public void setDEATHFLAG(boolean DEATHFLAG) {
+        this.DEATHFLAG = DEATHFLAG;
+    }
+
+
     public void addListener(){
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                repaint();
+                //repaint();
+//                System.out.println("Dianji");
+                /**
+                 * 若金币不够，则显示灰色升级按钮
+                 */
+                if(Integer.valueOf(MainGameJframe.money.getText()) >= 40) {
+                    updatePanel.setPath("Image/update01.png");
+                } else {
+                    updatePanel.setPath("Image/update02.png");
+                }
+                /**
+                 * 炮塔对更新和移除面板的操作
+                 */
+                updateflag = !updateflag;
+                removeflag = !removeflag;
+                updatePanel.setVisible(updateflag);
+                removePanel.setVisible(removeflag);
             }
         });
     }
 
     @Override
     public void run() {
-        while (true) {
-            /**
-             * 当怪物集合中有怪物时开始判断
-             */
+        while (!DEATHFLAG) {
+
             if(monsters.size() > 0 ) {
-                size = monsters.size();
-                    for (int i = 0; i < monsters.size(); i++) {
-                        /**
-                         * 將当前炮塔的x，y，r值放入每個怪物中
-                         */
+                //当怪物集合中有怪物时开始判断
+                int i = 0;
+                    while (i < monsters.size()) {
                         monsters.get(i).setTower(X, Y, R);
-                        //m.setTower((int)this.X,(int)this.Y,this.R);
-//                    if (m.getCenter(this.X,this.Y,this.R)) {
-//                        number++;
-//                        System.out.println(this.Num+"号炮塔发现"+number+"个敌人");
-//                    }
+                        //將当前炮塔的x，y，r值放入每個怪物中
                         /**
                          * 判断每个怪物是否在当前炮塔的攻击范围内
                          */
-                        if (monsters.get(i).getCenter() && monsters.size() != 0) {
+                        if (monsters.get(i).getCenter()) {
                             m = monsters.get(i);
                             double linbian = Math.abs(m.getMonsterY() - this.Y);
                             double duibian = Math.abs(m.getMonsterX() - this.X);
                             double xiebian = Math.sqrt(linbian * linbian + duibian * duibian);
-                            while (monsters.size() > 0 && m.getHp() != 0 && m.getCenter()) {
                                 if (m.getMonsterY() < this.Y && m.getMonsterX() < this.X) {
                                     this.degree = (-1) * Math.atan(Math.abs(duibian / linbian));
                                 } else if (m.getMonsterY() < this.Y && m.getMonsterX() > this.X) {
@@ -179,7 +221,10 @@ public class Tower extends GameObject implements Runnable{
                                 } else if (m.getMonsterY() > this.Y && m.getMonsterX() < this.X) {
                                     this.degree = Math.PI + Math.atan(Math.abs(duibian / linbian));
                                 }
-                                this.paintComponent(this.getGraphics());
+                                if (DEATHFLAG){
+                                    break;
+                                }
+                            this.paintComponent(this.getGraphics());
                                 this.bullet.setAD(AD);
                                 if (this.bullet.getFlag() == true) {
                                     new Thread(new Runnable() {
@@ -192,55 +237,34 @@ public class Tower extends GameObject implements Runnable{
                                     this.bullet.setMonster(m);
                                     this.bullet.setVisible(true);
                                     this.bullet.startAD();
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                                i = 0;
-                                size = 0;
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        } else {
-                            this.degree = 0;
-                            this.paintComponent(super.getGraphics());
+                            i = 0;
+                    }
+                        else {
+                            i++;
                         }
-//                        Math.abs(monsters.get(i).getMonsterY()-this.Y)/ Math.abs(monsters.get(i).getMonsterX()-this.X)
-                    }
-//                    double linbian = Math.abs(monsters.get(0).getMonsterY()-this.Y + MAX_BGWIDTH /2);
-//                    double duibian = Math.abs(monsters.get(0).getMonsterX()-this.X + MAX_BGWIDTH /2);
-//                    this.degree = Math.atan(Math.abs(duibian/linbian));
-//                    if (monsters.get(0).getMonsterX()-this.X<0){
-//                        this.degree = -1*degree;
-//                    }
-//                    else {
-//                    }
-//                    repaint();
-//                    }
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
-
-            else {
-                this.degree = 0;
-//                for(Monster m : monsters) {
-//                    //m.setTower((int)this.X,(int)this.Y,this.R);
-////                    if (m.getCenter(this.X,this.Y,this.R)) {
-////                        number++;
-////                        System.out.println(this.Num+"号炮塔发现"+number+"个敌人");
-////                    }
-//                    m.getCenter();
-//                    try {
-//                        Thread.sleep(200);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (!DEATHFLAG&&degree!=0){
+                    this.degree = 0;
+                    this.paintComponent(super.getGraphics());
+                }
             }
 
         }
+        System.out.println("线程已总结");
+    }
+
+    public boolean getDEATH() {
+        return DEATHFLAG;
     }
 }

@@ -62,7 +62,7 @@ public class Bullet extends GameObject implements Runnable{
                 e.printStackTrace();
             }
         }
-        if (monster.getHp()<1){
+        if (monster.getHp()<1||monster.getDEATH()==1){
             monster = null;
             flag = true;
             this.setVisible(false);

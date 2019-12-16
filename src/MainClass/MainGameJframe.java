@@ -1,9 +1,6 @@
 package MainClass;
 
-import GameObject.Bullet;
-import GameObject.FireBall;
-import GameObject.Monster;
-import GameObject.Tower;
+import GameObject.*;
 import MyClass.GameMusic;
 import MyClass.MyImgJpanel;
 import MyClass.MyJlabel;
@@ -44,7 +41,7 @@ public class MainGameJframe extends JFrame  {
     /**
      * Towers -> 炮塔集合
      */
-    ArrayList<JPanel> Towers = new ArrayList<>();
+    ArrayList<Tower> Towers = new ArrayList<>();
 
     /**
      * AllMonsters -> 所有怪物集合
@@ -54,7 +51,7 @@ public class MainGameJframe extends JFrame  {
     /**
      * monsters -> 怪物集合
      */
-    ArrayList<Monster> monsters = new ArrayList<>();
+    volatile ArrayList<Monster> monsters = new ArrayList<>();
 
     /**
      * screenWidth -> 屏幕宽度
@@ -79,12 +76,12 @@ public class MainGameJframe extends JFrame  {
     /**
      * money -> 金币数 初始值0
      */
-    public JLabel money;
+    static public JLabel money;
 
     /**
      * HP -> 血量 初始值100
      */
-    public JLabel HP ;
+    static public JLabel HP ;
 
     /**
      * sbx -> 鼠标x轴坐标
@@ -179,12 +176,48 @@ public class MainGameJframe extends JFrame  {
                 }
             }
 
-            while(monsters.size() > 0) {
-                for(int i = 0; i < monsters.size(); i++) {
-                    if (monsters.get(i).getDEATH() == 1) {
-                        System.out.println("炮塔"+i+"被移除");
-                        monsters.remove(i);
-                        //System.out.println(monsters.size());
+        }
+    }
+
+    private class JudgeMonstersDeath extends Thread{
+        @Override
+        public void run(){
+            while (true){
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (monsters.size() > 0) {
+                    for(int i = 0; i < monsters.size(); i++) {
+                        if (monsters.get(i).getDEATH() == 1) {
+                            monsters.remove(i);
+                            //System.out.println(monsters.size());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private class JudgeTowersDeath extends Thread{
+        @Override
+        public void run(){
+            while (true){
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                while(Towers.size() > 0) {
+//                System.out.println("剩余"+Towers.size()+"个");
+                    for (int i = 0; i < Towers.size(); i++) {
+                        if (Towers.get(i).getDEATH()) {
+                            System.out.println("炮塔"+i+"被移除");
+                            Towers.remove(i);
+                            i = 0;
+                        }
                     }
                 }
             }
@@ -207,7 +240,8 @@ public class MainGameJframe extends JFrame  {
 
             }
         }).start();
-
+        new JudgeMonstersDeath().start();
+        new JudgeTowersDeath().start();
         /**
          * 生成怪物线程
          */
@@ -240,6 +274,8 @@ public class MainGameJframe extends JFrame  {
         //将容器的布局设为绝对布局
 
         this.setBounds(100,100,screenWidth-200,screenHeight-200);
+        System.out.println(screenWidth-200);
+        System.out.println(screenHeight-200);
         //窗口大小以及位置
 
 
@@ -333,13 +369,27 @@ public class MainGameJframe extends JFrame  {
                 for (Monster monster:monsters){
                     monster.addBullets(t.getBullet());
                 }
-            Bullet bullet = new Bullet();
-            t.setBullet(bullet);
-            bullet.setBounds(0,0,30,30);
-            bullet.setVisible(false);
-            jLayeredPane.add(bullet,Integer.valueOf(2001));
+                //子弹模块
+                Bullet bullet = new Bullet();
+                bullet.setBounds(0,0,30,30);
+                bullet.setVisible(false);
+                jLayeredPane.add(bullet,Integer.valueOf(2001));
+
+                //炮塔升级模块
+                UpdatePanel updatePanel = new UpdatePanel();
+                updatePanel.setBounds(0,0,MAX_BGWIDTH,MAX_BGWIDTH);
+                jLayeredPane.add(updatePanel,Integer.valueOf(2002));
+
+                //炮塔移除模块
+                RemovePanel removePanel = new RemovePanel();
+                removePanel.setBounds(0,0,MAX_BGWIDTH,MAX_BGWIDTH);
+                jLayeredPane.add(removePanel,Integer.valueOf(2002));
+
                 jLayeredPane.add(t,Integer.valueOf(2000));
                 setLocation(e.getX(),e.getY(),t);
+                t.setBullet(bullet);
+                t.setRemovePanel(removePanel);
+                t.setUpdatePanel(updatePanel);
                 Towers.add(t);
                 t1.start();
                 test.setBounds(0, 0, 0, 0);
