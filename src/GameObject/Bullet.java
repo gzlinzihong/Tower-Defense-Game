@@ -24,15 +24,6 @@ public class Bullet extends GameObject implements Runnable{
         this.degree = degree;
     }
 
-//    @Override
-//    public void paint(Graphics g) {
-//        Color c = g.getColor();
-//        super.paint(g);
-//        g.fillRect(X,Y,5,10);
-//        g.setColor(Color.RED);
-//        g.setColor(c);
-//    }
-
     @Override
     public void run() {
             this.X += 1;
@@ -40,13 +31,6 @@ public class Bullet extends GameObject implements Runnable{
             System.out.println(this.X+","+this.Y);
             repaint();
     }
-
-//    public void test() {
-//        while(this.X < test_X) {
-//            this.X += 10;
-//            System.out.println(this.X);
-//        }
-//    }
 
     @Override
     public void paint(Graphics g) {

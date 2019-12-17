@@ -3,6 +3,7 @@ package MainClass;
 import GameObject.Bullet;
 import GameObject.Monster;
 import GameObject.Tower;
+import GameObject.Constant;
 import MyClass.MyGif;
 import MyClass.MyImgJpanel;
 import MyClass.MyJlabel;
@@ -13,6 +14,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
 
+import static GameObject.Monster.dealDeadMonster;
+
 /**
  * 游戏界面
  *
@@ -20,242 +23,152 @@ import java.util.*;
  * @date 2019年 11月25日 18:02:08
  */
 public class MainGameJframe extends JFrame  {
-    /**
-     * 常量
-     */
-    static final int MAX_LEFT = 143;// 可放置炮塔的最左部x值
-    static final int MAX_RIGHT = 1059;// 可放置炮塔的最右部x值
-    static final int MAX_TOP = 171;// 可放置炮塔的最顶部y值
-    static final int MAX_BOTTOM = 662;// 可放置炮塔的最底部y值
-    static final int MAX_BGWIDTH = 70;// 每个方块的像素长度
-    static final int RELATIVE_LOCATION = 141;  // 炮塔相对于左上角第一个塔座的距离
+
+    private JPanel map;                                     //map -> 地图
+    private JPanel tower;                                   //tower ->炮塔图片
+
+    ArrayList<JPanel> Towers = new ArrayList<>();           //Towers -> 炮塔集合
+    Map<Integer,Monster> AllMonsters = new HashMap<>();     //AllMonsters -> 所有怪物集合
+    ArrayList<Monster> monsters = new ArrayList<>();        //monsters -> 怪物集合
+
+    private int screenWidth;                                //screenWidth -> 屏幕宽度
+    private int screenHeight;                               //screenHeight -> 屏幕高度
+    private JLabel moneytitile;                             //moneytitle -> "金币:"
+    private JLabel HPtitle ;                                //HPtitle -> "血量:"
+    public JLabel money;                                    //money -> 金币数 初始值0
+    public JLabel HP ;                                      //HP -> 玩家血量 初始值100
+    private int sbx;                                        //sbx -> 鼠标x轴坐标
+    private int sby;                                        //sby -> 鼠标y轴坐标
+    private MyImgJpanel test = new MyImgJpanel("Image/tower.png");  //test -> 工具人图片
+    boolean hasClickedTowerFlag = false;                    //hasClickedTowerFlag -> 是否点击炮塔标记
+    boolean isPutDownFlag = false;                          //isPutDownFlag -> 是否将炮塔放下标记
+    private JLayeredPane jLayeredPane = this.getLayeredPane();  //jLayeredPane ->  JLayeredPane层,用来解决JPanel重叠问题
+    private int monsterInterval;                            //
+    private int monsterStep;                                //从MainStartJframe传过来的值,怪物的步数
+    private int monsterAttack;                              //从MainStartJframe传过来的值,怪物的攻击力值
+    private int monsterHP;                                  //从MainStartJframe传过来的值,怪物的血量
 
     /**
-     * map -> 地图
+     * Drawing 动画线程类
+     * 继承Thread
      */
-    private JPanel map;
-
-    /**
-     * tower ->炮塔图片
-     */
-    private JPanel tower;
-
-    /**
-     * Towers -> 炮塔集合
-     */
-    ArrayList<JPanel> Towers = new ArrayList<>();
-
-    /**
-     * AllMonsters -> 所有怪物集合
-     */
-    Map<Integer,Monster> AllMonsters = new HashMap<>();
-
-    /**
-     * monsters -> 怪物集合
-     */
-    ArrayList<Monster> monsters = new ArrayList<>();
-
-    /**
-     * screenWidth -> 屏幕宽度
-     */
-    private int screenWidth;
-
-    /**
-     * screenHeight -> 屏幕高度
-     */
-    private int screenHeight;
-
-    /**
-     *  moneytitle -> "金币:"
-     */
-    private JLabel moneytitile;
-
-    /**
-     * HPtitle -> "血量:"
-     */
-    private JLabel HPtitle ;
-
-    /**
-     * money -> 金币数 初始值0
-     */
-    public JLabel money;
-
-    /**
-     * HP -> 血量 初始值100
-     */
-    public JLabel HP ;
-
-    /**
-     * sbx -> 鼠标x轴坐标
-     */
-    private int sbx;
-
-    /**
-     * sby -> 鼠标y轴坐标
-     */
-    private int sby;
-
-    /**
-     * test -> 工具人图片
-     */
-    private MyImgJpanel test = new MyImgJpanel("Image/tower.png");
-
-    /**
-     * hasClickedTowerFlag -> 是否点击炮塔标记
-     */
-    boolean hasClickedTowerFlag = false;
-
-    /**
-     * isPutDownFlag -> 是否将炮塔放下标记
-     */
-    boolean isPutDownFlag = false;
-
-    /**
-     * monsterInterval -> 怪物出现的时间间隔,由窗口1传递过来。默认为一般
-     * 简单为 -1 即每波怪物的时间间隔比默认值多1s
-     * 一般为 0 即每波怪物的时间间隔一致
-     * 困难为 1 即每波怪物的时间间隔比默认值少1
-     */
-    private int monsterInterval = 0;
-
-    /**
-     * monsterSpeed -> 怪物走动的速度,即线程刷新的快慢
-     */
-    private int monsterSpeed = 20;
-
-
-
-//    private boolean hasTowerFlag = false;
-//    private ExecutorService threadPool = Executors.newSingleThreadExecutor();
-//    private Future<Integer> future;
-
-    /**
-     * monster -> 怪物
-     */
-    private MyImgJpanel monster;
-
-    /**
-     * jLayeredPane ->  JLayeredPane层,用来解决JPanel重叠问题
-     */
-    private JLayeredPane jLayeredPane = this.getLayeredPane();
-
-    /**
-     * Drawing 动画线程类 继承Thread
-     */
-
     private class Drawing extends Thread{
         @Override
         public void run(){
-            for (int i = 0;i<16;i++){
+            //怪物生成
+            for(int i = 0 ; i < Constant.MAP1_MONSTERS.length - 1 ; i++){
+                for(int j = 0 ; j < Constant.MAP1_MONSTERS[i][0] ; j++){
+                    Monster monster1 = new Monster(Constant.FATTY_PATH,monsterHP,monsterAttack, Constant.MAX_BGWIDTH, Constant.MAX_BGWIDTH,monsterStep,HP,money);
+                    if(j % 3 == 0 && j != 0){
+                        monster1 = new Monster(Constant.DRAGON_PATH,monsterHP + 50,monsterAttack + 5, Constant.MAX_BGWIDTH, Constant.MAX_BGWIDTH,monsterStep,HP,money);
+                    }else if(j % 5 == 0 && j != 0){
+                        monster1 = new Monster(Constant.WOLFMAN_PATH,monsterHP + 100,monsterAttack + 10, Constant.MAX_BGWIDTH, Constant.MAX_BGWIDTH,monsterStep + 1,HP,money);
+                    }
+                    monsters.add(monster1);
+                    jLayeredPane.add(monster1,Integer.valueOf(300));
 
-                /**
-                 * 怪物生成
-                 */
-                Monster monster1 = new Monster("Image/howl.png", monsterSpeed, MAX_BGWIDTH, MAX_BGWIDTH,monsters.size());
-                monsters.add(monster1);
-                jLayeredPane.add(monster1,Integer.valueOf(300));
-                try {
-                    sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    //处理被打死的怪物，增加相应的金币数，该方法是静态方法
+                    dealDeadMonster(monsters,money);
+                    try {
+                        sleep(monster1.getInterval(Constant.MAP1_MONSTERS[i][1],Constant.MAP1_MONSTERS[i][2]));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
-            while(monsters.size() > 0) {
-                for(int i = 0; i < monsters.size(); i++) {
-                    if (monsters.get(i).getDEATH() == 1) {
-                        monsters.remove(i);
-                        //System.out.println(monsters.size());
-                    }
-                }
+            //检测并处理怪物数组中已被打死的怪物，增加相应的金币数
+            while(monsters.size() > 0){
+                dealDeadMonster(monsters,money);
             }
         }
     }
 
-
-
-    public MainGameJframe(int monsterInterval,int monsterSpeed){
+    /**
+     * 构造方法
+     */
+    public MainGameJframe(int monsterInterval,int monsterStep,int monsterAttack,int monsterHP){
         super("Tower Defense Game");
-        this.monsterInterval = monsterInterval;
-        this.monsterSpeed = monsterSpeed;
         this.initComponents();
+        this.monsterInterval = monsterInterval;
+        this.monsterStep = monsterStep;
+        this.monsterAttack = monsterAttack;
+        this.monsterHP = monsterHP;
 
-        /**
-         * 生成怪物线程
-         */
+        //生成怪物线程,创建Drawing对象
         new Drawing().start();
-//        for (int i = 0;i<5;i++){
-//            new Drawing().start();
-//
-//        }
-
     }
 
     private void initComponents() {
         Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.screenWidth = (int) screensize.getWidth();
+
         //获得屏幕得宽
-        this.screenHeight = (int) screensize.getHeight();
+        this.screenWidth = (int) screensize.getWidth();
         //获得屏幕得高
+        this.screenHeight = (int) screensize.getHeight();
 
-        this.setResizable(false);
         //设置窗口大小不可更改
+        this.setResizable(false);
 
-
-
-
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         //设置用户在此窗体上发起 "close" 时默认执行System.exit(0)
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-
-        this.setLayout(null);
         //将容器的布局设为绝对布局
+        this.setLayout(null);
 
-        this.setBounds(100,100,screenWidth-200,screenHeight-200);
         //窗口大小以及位置
+        this.setBounds(100,100,screenWidth-200,screenHeight-200);
 
-
-        this.map = new MyImgJpanel("Image/map.png");
         //生成地图
+        this.map = new MyImgJpanel("Image/map.png");
 
+        //地图大小位置
         map.setBounds(0,4,1190,770);
         jLayeredPane.add(map, Integer.valueOf(100));
-        //地图大小位置
 
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //System.out.println(134+ ((e.getX() - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH);
 
+                //是否点击右边的炮塔图片
                 if (hasClickedTowerFlag == true) {
                     isPutDownFlag = true;
                 }
-                    if (isPutDownFlag == true && legalLocation(e.getX(),e.getY())) {
+                if (isPutDownFlag == true && legalLocation(e.getX(),e.getY())) {
+                    //生成炮塔
+                    Tower t = new Tower("Image/tank1.png",10);
 
-                        /**
-                         * 生成炮塔
-                         */
-                        Tower t = new Tower("Image/tank1.png");
-                        t.setArray(monsters);
-                        Thread t1 = new Thread(t);
-                        for (Monster monster:monsters){
-                            monster.addBullets(t.getBullet());
-                        }
-                        jLayeredPane.add(t,Integer.valueOf(2000));
-                        setLocation(e.getX(),e.getY(),t);
-                        Towers.add(t);
-                        t1.start();
-                        test.setBounds(screenWidth-500, 300, 100, 100);
-                        hasClickedTowerFlag = false;
-                        isPutDownFlag = false;
-                    } else {
-                        test.setBounds(screenWidth-500, 300, 100, 100);
-                        hasClickedTowerFlag = false;
-                        isPutDownFlag = false;
+                    //把现有的怪物集合传给这个炮塔对象
+                    t.setArray(monsters);
+                    Thread t1 = new Thread(t);
+
+                    //为所有怪物添加监听子弹的事件
+                    for (Monster monster:monsters){
+                        monster.addBullets(t.getBullet());
                     }
 
+                    jLayeredPane.add(t,Integer.valueOf(2000));
+
+                    //设置炮塔放置的位置
+                    setLocation(e.getX(),e.getY(),t);
+
+                    //先将该炮塔对象添加进炮塔集合，再启动线程
+                    Towers.add(t);
+                    t1.start();
+
+                    test.setBounds(screenWidth-500, 300, 100, 100);
+
+                    hasClickedTowerFlag = false;
+                    isPutDownFlag = false;
+                } else {
+                    test.setBounds(screenWidth-500, 300, 100, 100);
+                    hasClickedTowerFlag = false;
+                    isPutDownFlag = false;
+                }
             }
         });
+
+        //监听鼠标移动，使炮塔跟随鼠标移动
         this.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -264,66 +177,37 @@ public class MainGameJframe extends JFrame  {
                 if (hasClickedTowerFlag == true){
                     test.setBounds(sbx-50,sby-90,100,100);
                     test.repaint();
-//                    Tower t = new Tower(1, 140 + (((e.getX() - MAX_LEFT) / MAX_BGWIDTH) - 1) * 32,
-//                            170 + (((e.getY() - MAX_TOP) / MAX_BGWIDTH)) * 32,
-//                            MAX_BGWIDTH,MAX_BGWIDTH,Towers.size());
                 }
             }
         });
 
-
-
+        //右边玩家血量和金币数
         moneytitile = new MyJlabel(this,"金币:",550,30,100,100);
         HPtitle = new MyJlabel(this,"血量:",550,100,100,100);
-        money = new MyJlabel(this,"0",400,30,100,100);
-        HP = new MyJlabel(this,"100",400,100,100,100);
-
+        money = new MyJlabel(this,"" + Constant.Money,400,30,100,100);
+        HP = new MyJlabel(this,"" + Constant.PlayerHP,400,100,100,100);
 
         this.tower = new MyImgJpanel("Image/tower.png");
         tower.setBounds(screenWidth-500,300,100,100);
         jLayeredPane.add(tower,Integer.valueOf(300));
 
-
         tower.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         //炮塔光标
         test.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        add(tower);
-
-
-
-//        this.monster = new MyImgJpanel("Image/test.png");
-//        monster.setBounds(5,64,100,100);
-//        jLayeredPane.add(monster,Integer.valueOf(200));
-
-
+        this.add(tower);
 
         tower.addMouseListener(new MouseAdapter() {
-            //炮塔监听事件
+            //右边炮塔选项监听事件
             @Override
             public void mouseClicked(MouseEvent e) {
                 test.setBounds(screenWidth-500,300,100,100);
                 jLayeredPane.add(test,Integer.valueOf(1000));
                 hasClickedTowerFlag = true;
-
-
-//                future = threadPool.submit(new Callable<Integer>() {
-//                    public Integer call() throws Exception {
-//                        return new Random().nextInt(100);
-//                    }
-//                });
-//                hasTowerFlag = true;Press;
             }
         });
-
-
-
-
-
-
     }
 
     /**
-     *
      * @param money
      * 设置money
      */
@@ -332,38 +216,43 @@ public class MainGameJframe extends JFrame  {
     }
 
     /**
-     *
+     * 获取金币数量字符串
+     * @return money
+     */
+    public String getMoney(){
+        return money.getText();
+    }
+
+    /**
      * @param HP
-     * 设置血量
+     * 设置玩家血量
      */
     public void setHP(int HP){
         this.HP.setText(String.valueOf(HP));
     }
 
-//    public void getModify(){
-//                try {
-//                    System.out.println(future.get());
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//    }
+    /**
+     * 返回玩家血量字符串
+     * @return HP
+     */
+    public String getHP(){
+        return HP.getText();
+    }
+
     public void setLocation(int x,int  y, Tower t) {
-        t.setCenterXY(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0,RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0, MAX_BGWIDTH*1.5);
-        t.setBounds(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH, RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH, MAX_BGWIDTH,MAX_BGWIDTH);
-        //System.out.println(134+ ((x - MAX_LEFT) / MAX_BGWIDTH) * 32);
+        t.setCenterXY(Constant.RELATIVE_LOCATION + ((x - Constant.MAX_LEFT) / Constant.MAX_BGWIDTH)
+                * Constant.MAX_BGWIDTH + Constant.MAX_BGWIDTH / 2.0,Constant.RELATIVE_LOCATION +
+                (((y - Constant.MAX_TOP) / Constant.MAX_BGWIDTH)) * Constant.MAX_BGWIDTH + Constant.MAX_BGWIDTH / 2.0, Constant.MAX_BGWIDTH*1.5);
+        t.setBounds(Constant.RELATIVE_LOCATION + ((x - Constant.MAX_LEFT) / Constant.MAX_BGWIDTH) * Constant.MAX_BGWIDTH,
+                Constant.RELATIVE_LOCATION + (((y - Constant.MAX_TOP) / Constant.MAX_BGWIDTH)) * Constant.MAX_BGWIDTH, Constant.MAX_BGWIDTH,Constant.MAX_BGWIDTH);
     }
 
     public Boolean legalLocation (int x, int y) {
-        if (x < MAX_RIGHT && x > MAX_LEFT && y > MAX_TOP && y < MAX_BOTTOM && (x - MAX_LEFT) / MAX_BGWIDTH % 2 == 0 && ((y - MAX_TOP) / MAX_BGWIDTH) % 2 == 0) {
+        if (x < Constant.MAX_RIGHT && x > Constant.MAX_LEFT && y > Constant.MAX_TOP && y < Constant.MAX_BOTTOM && (x - Constant.MAX_LEFT) / Constant.MAX_BGWIDTH % 2 == 0 &&
+                ((y - Constant.MAX_TOP) / Constant.MAX_BGWIDTH) % 2 == 0) {
             return true;
-           //System.out.println(true);
         } else {
             return false;
-            //System.out.println(false);
         }
     }
 

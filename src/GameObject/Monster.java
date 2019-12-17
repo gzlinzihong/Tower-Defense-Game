@@ -1,7 +1,7 @@
 package GameObject;
 
+import MyClass.MyGif;
 import MyInterfaces.Moveable;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -10,99 +10,37 @@ import java.util.ArrayList;
 
 /**
  * 怪物类
- *
  * @author 嘿 林梓鸿
  * @date 2019年 12月02日 23:36:32
  */
-public class Monster extends GameObject implements Runnable, Moveable{
-    /**
-     * 怪物死亡标志
-     */
-    int DEATH = 0;
-
-    /**
-     * MNUMS -> 怪物数量
-     */
-//    private final int MNUMS = 8;
-
-    /**
-     * monsterSpeed -> 怪物走动的速度,即线程刷新的快慢
-     */
-    private int monsterSpeed = 20;
-
-    /**
-     * monsterSpeedDifference -> 怪物一波比一波快的差值
-     */
-    private int monsterSpeedDifference = 3;
-
-//    private ArrayList<Monster> monsters = new ArrayList<Monster>();
-
-    /**
-     * 怪物图标
-     */
-    private ImageIcon img;
-
-    /**
-     * 怪物血量
-     */
-    private int hp = 100;
-
-    /**
-     * path -> 图片路径
-     */
-    private String path;
-
-    /**
-     * 血量图的宽度
-     */
-    private int HPX=100;
-
-    /**
-     * 血量图的高度
-     */
-    private int HPY=6;
-
-    /**
-     * 怪物步数
-     */
-    private int step = 3;
-
-
-    /**
-     * 血量图的路径
-     */
-    private String hpImgPath = "Image/hp.png";
-
-    /**
-     * 血量图
-     */
-    private ImageIcon hpImg ;
-
-    /**
-     * 血量图的x轴
-     */
-    private int hpImgX = 0;
-
-    /**
-     * 血量图的y轴
-     */
-    private int hpImgY = 0;
-
-    /**
-     * 子弹集合
-     */
-    private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-
-    /**
-     * 碰撞监听器
-     */
-    private CrashDetection crashListener = new CrashDetection();
-
+public class Monster extends GameObject implements Runnable{
+    private int DEATH = 0;                      //怪物死亡标志
+//    private final int MNUMS = 8;              //MNUMS -> 怪物数量
+    private int repaintSpeed = 30;              //speed -> 怪物走动的速度,即线程刷新的快慢
+    private int monsterSpeedDifference = 3;     //monsterSpeedDifference -> 怪物一波比一波快的差值
+    private ImageIcon img;                      //怪物图标
+    private int hp;                             //怪物血量
+    private String[] pathArray;                 //图片路径数组
+    private String path;                        //path -> 图片路径
+    private int HPX = 100;                      //血量图的宽度
+    private int HPY = 10;                       //血量图的高度
+    private int step;                           //怪物步数
+    private String hpImgPath = "Image/hp.png";  //血量图的路径
+    private ImageIcon hpImg ;                   //血量图
+    private int hpImgX = 0;                     //血量图的x轴
+    private int hpImgY = 0;                     //血量图的y轴
+    private ArrayList<Bullet> bullets = new ArrayList<Bullet>();        //子弹集合
+    private CrashDetection crashListener = new CrashDetection();   //碰撞监听器
 
     private double Tower_x;
     private double Tower_y;
     private double Tower_r;
 
+    private int attack;                     //怪物攻击力
+    private JLabel PlayerHP;                //玩家HP值容器
+    private JLabel PlayerMoney;             //玩家金币值容器
+    private Thread MonsterThread;           //此怪物线程
+    private boolean exit = true;            //怪物线程终止标志，用于退出 run() 方法中的while循环
 
     @Override
     protected void paintComponent(Graphics g){
@@ -112,30 +50,21 @@ public class Monster extends GameObject implements Runnable, Moveable{
         g.drawImage(hpImg.getImage(),hpImgX,hpImgY,HPX,HPY,null);
     }
 
-
-
-    public Monster(String path,int monsterSpeed,int width,int height, int NUM) {
-        super(path);
-        this.NUMBER = NUM;
-        initParameter(path,monsterSpeed,width,height);
-    }
-
-    /**
-     * 初始化变量
-     * @param path
-     * @param monsterSpeed
-     * @param width
-     * @param height
-     */
-    public void initParameter(String path,int monsterSpeed,int width,int height){
-        this.path = path;
-        this.monsterSpeed = monsterSpeed;
+    public Monster(String[] pathArray,int monsterHP,int monsterAttack,int width,int height,int step,JLabel playerHP,JLabel playerMoney) {
+        super(pathArray[0]);
+        this.path = pathArray[0];
+        this.pathArray = pathArray;
+        this.hp = monsterHP;
+        this.attack = monsterAttack;
         this.X = 5;
         this.Y = 70;
         this.width = width;
         this.height = height;
-        Thread thread = new Thread(this);
-        thread.start();
+        this.step = step;
+        this.PlayerHP = playerHP;
+        this.PlayerMoney = playerMoney;
+        MonsterThread = new Thread(this);
+        MonsterThread.start();
         this.createMouseAdapter();
     }
 
@@ -153,109 +82,136 @@ public class Monster extends GameObject implements Runnable, Moveable{
 
     @Override
     public void run() {
-        runMap();
+        while(exit){
+            move();
+            this.setVisible(false);
+            //到达终点，攻击玩家
+            this.reducePlayerHP(this.PlayerHP);
+        }
     }
 
     /**
-     * 跑地图
-     * flag = 1 向右跑
-     * flag = 2 向左跑
-     * flag = 3 想下跑
+     * 检测怪物是否在死之前到达终点
      */
-    public void runMap(){
-        moveMonster(1050,step,1);
-        moveMonster(140,step,3);
-        moveMonster(985,step,2);
-        moveMonster(140,step,3);
-        moveMonster(985,step,1);
-        moveMonster(140,step,3);
-        moveMonster(985,step,2);
-        moveMonster(140,step,3);
-        moveMonster(930,step,1);
-        this.DEATH = 1;
-        this.setVisible(false);
+    private void testArriveDestination(int destination,JLabel HP){
+        if(hp >= 1){
+            reducePlayerHP(HP);
+        }
     }
 
     /**
-     * 移动怪物
-     * @param distance
-     * @param step
+     * 怪物移动方法
+     * 0 -> up,1 -> right,2 -> down,3 -> left
      */
-    public void moveMonster(int distance,int step,int flag){
-        for (int i = 0;i<distance/step;i++){
-            switch (flag){
+    public void move(){
+        //检测是否经过标记点
+        int j = 0;
+        for(int i = 0 ; i <= Constant.MAP1_COORD[j][0]/step ; i++){
+            //修改坐标等相应的变量
+            switch (Constant.MAP1_COORD[j][1]){
+                case 0:
+                    moveRepeatOption(0,pathArray[0]);
+                    break;
                 case 1:
-                    hpImgX = 0;
-                    hpImgY = 0;
-                    HPX = 100;
-                    HPY = 10;
-                    path = "Image/howl.png" ;
-                    hpImgPath = "Image/hp.png";
-                    this.moveRight(i,step);
+                    moveRepeatOption(1,pathArray[0]);
                     break;
                 case 2:
-                    hpImgX = 0;
-                    hpImgY = 0;
-                    HPX = 100;
-                    HPY = 10;
-                    path = "Image/howl2.png" ;
-                    hpImgPath = "Image/hp2.png";
-                    this.moveLeft(i,step);
+                    moveRepeatOption(2,pathArray[1]);
                     break;
                 case 3:
-                    hpImgX = (int)width-10;
-                    hpImgY = 0;
-                    HPX = 10;
-                    HPY = 100;
-                    path = "Image/howl3.png" ;
-                    hpImgPath = "Image/hp3.png";
-                    this.moveDown(i,step);
+                    moveRepeatOption(3,pathArray[1]);
                     break;
                 default:this.crashListener.initObject(this,this.bullets);
             }
+
+            //修改i,j,每走完一段，j++,i = 0
+            if(i >= Constant.MAP1_COORD[j][0]/step){
+                j++;
+                if(j >= Constant.MAP1_COORD.length)
+                    break;
+                i = 0;
+            }
+
             revalidate();
             //这个方法是只重绘组件。解决图片闪烁问题。但偶尔会卡顿
             try {
-                Thread.sleep(monsterSpeed);
+                Thread.sleep(repaintSpeed);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
-
-
-    @Override
-    public void moveRight(int i,int step) {
+    /**
+     * 怪物移动方法中的重复操作
+     * @param direct
+     */
+    private void moveRepeatOption(int direct,String pathItem){
         if(hp < 1) {
             this.DEATH = 1;
+            this.exit = false;
             this.setVisible(false);
         } else {
-            X = X + step;
-            this.setBounds((int) X, (int) Y, (int) width, (int) height);
+            switch (direct){
+                case 0:
+                    Y -= step;
+                    break;
+                case 1:
+                    X = X + step;
+                    break;
+                case 2:
+                    Y = Y + step;
+                    break;
+                case 3:
+                    X  -= step;
+            }
+        }
+        this.setBounds((int) X, (int) Y, (int) width, (int) height);
+        //更换怪物图片
+        path = pathItem;
+    }
+
+    /**
+     * 减少玩家血量，怪物到达终点后，攻击玩家
+     * @param e
+     */
+    public void reducePlayerHP(JLabel e){
+        if(this.DEATH == 0 ) {
+            Constant.PlayerHP -= this.attack;
+            e.setText("" + Constant.PlayerHP);
         }
     }
 
-    @Override
-    public void moveLeft(int i,int step) {
-        if(hp < 1) {
-            this.DEATH = 1;
-            this.setVisible(false);
-        } else {
-            X = X - step;
-            this.setBounds((int) X, (int) Y, (int) width, (int) height);
+    /**
+     * 增加玩家金币数量，在怪物被炮塔打死后
+     * @param e
+     */
+    public void increasePlayerMoney(JLabel e){
+        Constant.Money += 10;
+        e.setText("" + Constant.Money);
+    }
+
+    /**
+     * 处理怪物集合中已被打死的怪物，增加相应的金币数
+     * @param monsters
+     */
+    public static void dealDeadMonster(ArrayList<Monster> monsters,JLabel money){
+        for(int j = 0; j < monsters.size(); j++) {
+            if (monsters.get(j).getDEATH() == 1) {
+                monsters.get(j).increasePlayerMoney(money);
+                monsters.remove(j);
+            }
         }
     }
 
-    @Override
-    public void moveDown(int i,int step) {
-        if(hp < 1) {
-            this.DEATH = 1;
-            this.setVisible(false);
-        } else {
-            Y = Y + step;
-            this.setBounds((int) X, (int) Y, (int) width, (int) height);
-        }
+    /**
+     * 返回 n ~ m 毫秒的随机数，作为每个怪物出现的间隔
+     * @param n
+     * @param m
+     * @return
+     */
+    public int getInterval(int n,int m){
+        return (int)(Math.random()*(m - n + 1) + n);
     }
 
     public int getHPX() {
@@ -282,7 +238,6 @@ public class Monster extends GameObject implements Runnable, Moveable{
         this.Tower_x = x;
         this.Tower_y = y;
         this.Tower_r = r;
-        //System.out.println("怪物坐标"+ this.X+","+this.Y+",炮塔坐标："+ Tower_x +","+ Tower_y+","+ Tower_r);
     }
 
     public int getDEATH() {
@@ -295,13 +250,8 @@ public class Monster extends GameObject implements Runnable, Moveable{
 
     @Override
     public void getCenter() {
-        //System.out.println("怪物坐标"+ this.X+","+this.Y+",炮塔坐标："+ Tower_x +","+ Tower_y+","+ Tower_r);
-        //System.out.println("" + Math.sqrt(Math.pow((this.X - this.Tower_x), 2) + Math.pow(this.Y - this.Tower_y, 2)) + "," + (this.Tower_r + MAX_BGWIDTH*Math.sqrt(2)));
         if(Math.sqrt(Math.pow((this.X - this.Tower_x), 2) + Math.pow(this.Y - this.Tower_y, 2)) <= (this.Tower_r + MAX_BGWIDTH*Math.sqrt(2))) {
             this.hp -= 20;
         }
-//        else {
-//            System.out.println("----");
-//        }
     }
 }

@@ -16,13 +16,11 @@ public class MyImgJpanel extends JPanel {
     private ImageIcon img;
     private Image iBuffer;
     private Graphics gBuffer;
+
     public MyImgJpanel(String path){
         this.path = path;
     }
-    public MyImgJpanel() {
-    }
-
-
+    public MyImgJpanel() {}
 
     @Override
     protected void paintComponent(Graphics g){
@@ -40,7 +38,7 @@ public class MyImgJpanel extends JPanel {
         scr.drawImage(iBuffer,0,0,this);
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setPath(String pat) {
+        path = pat;
     }
 }

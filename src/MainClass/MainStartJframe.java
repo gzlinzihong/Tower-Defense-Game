@@ -52,11 +52,9 @@ public class MainStartJframe extends JFrame {
      */
     private int monsterInterval = 0;
 
-    /**
-     * monsterSpeed -> 怪物走动的速度,即线程刷新的快慢
-     */
-    private int monsterSpeed = 20;
-
+    private int monsterStep = 5;            //怪物默认步数，默认为简单难度
+    private int monsterAttack = 10;         //怪物默认攻击力值，默认为简单难度攻击力值
+    private int monsterHP = 100;            //怪物默认血量，默认为简单难度血量值
 
 
     /**
@@ -256,18 +254,24 @@ public class MainStartJframe extends JFrame {
     private void easyButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         this.monsterInterval = -1;
-        this.monsterSpeed = 20;
+        this.monsterStep = 1;
+        this.monsterAttack = 10;
+        this.monsterHP = 100;
     }
 
     private void commonButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         this.monsterInterval = 0;
-        this.monsterSpeed = 10;
+        this.monsterStep = 3;
+        this.monsterAttack = 15;
+        this.monsterHP = 150;
     }
     private void difficultyButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         this.monsterInterval = 1;
-        this.monsterSpeed = 5;
+        this.monsterStep = 5;
+        this.monsterAttack = 20;
+        this.monsterHP = 200;
     }
     private void StartJPanelMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
@@ -275,8 +279,7 @@ public class MainStartJframe extends JFrame {
         this.dispose();
         //关闭此窗口
 
-
-        new MainGameJframe(monsterInterval,monsterSpeed).setVisible(true);
+        new MainGameJframe(monsterInterval,monsterStep,monsterAttack,monsterHP).setVisible(true);
         //生成游戏界面窗口
 
     }
