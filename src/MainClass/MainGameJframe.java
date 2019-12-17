@@ -101,7 +101,6 @@ public class MainGameJframe extends JFrame  {
 
     private void initComponents() {
         Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
-
         //获得屏幕得宽
         this.screenWidth = (int) screensize.getWidth();
         //获得屏幕得高
