@@ -24,8 +24,8 @@ public class Bullet extends GameObject implements Runnable{
     private Monster monster;
     public Bullet() {
         super();
-        this.width=50;
-        this.height=50;
+        this.width=(int)((double)Constant.sceenwidth*0.026);
+        this.height=(int)((double)Constant.sceenwidth*0.026);;
     }
 
 
@@ -84,7 +84,7 @@ public class Bullet extends GameObject implements Runnable{
 
     @Override
     public Rectangle getRect() {
-        return new Rectangle((int)X,(int)Y,(int)width-20,(int)height-20);
+        return new Rectangle((int)X,(int)Y,(int)width,(int)height);
     }
 
 

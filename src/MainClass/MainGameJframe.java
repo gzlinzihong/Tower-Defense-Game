@@ -24,10 +24,11 @@ public class MainGameJframe extends JFrame  {
     static final int MAX_LEFT = (int)((double)Constant.sceenwidth*0.042);// 可放置炮塔的最左部x值
 //    (int)((double)Constant.sceenwidth*0.68)
     static final int MAX_RIGHT = (int)((double)Constant.sceenwidth*0.71);// 可放置炮塔的最右部x值
-    static final int MAX_TOP = (int)((double)Constant.sceenwidth*0.1);// 可放置炮塔的最顶部y值
-    static final int MAX_BOTTOM = (int)((double)Constant.sceenwidth*0.38);// 可放置炮塔的最底部y值
-    static final int MAX_BGWIDTH = (int)((double)Constant.sceenwidth*0.042);// 每个方块的像素长度
-    static final int RELATIVE_LOCATION = MAX_BGWIDTH/2;  // 炮塔相对于左上角第一个塔座的距离
+    static final int MAX_TOP = (int)((double)Constant.sceenheight*0.2);// 可放置炮塔的最顶部y值
+    static final int MAX_BOTTOM = (int)((double)Constant.sceenheight*0.69);// 可放置炮塔的最底部y值
+    static final int MAX_BGWIDTHX = (int)((double)Constant.sceenwidth*0.042);// 每个方块的X像素长度
+    static final int MAX_BGWIDTHY = (int)((double)Constant.sceenheight*0.072);// 每个方块的X像素长度
+//    static final int RELATIVE_LOCATION = MAX_BGWIDTH/2;  // 炮塔相对于左上角第一个塔座的距离
 
     /**
      * map -> 地图
@@ -171,12 +172,12 @@ public class MainGameJframe extends JFrame  {
                 for(int j = 0 ; j < Constant.MAP1_MONSTERS[i][0] ; j++){
                     Monster monster1;
                     if(j % 3 == 0 && j != 0){
-                         monster1 = new Monster(Constant.DRAGON_PATH,monsterHP + 50,monsterAttack + 5,monsterStep, MAX_BGWIDTH, MAX_BGWIDTH);
+                         monster1 = new Monster(Constant.DRAGON_PATH,monsterHP + 50,monsterAttack + 5,monsterStep, MAX_BGWIDTHX, MAX_BGWIDTHY);
                     }else if(j % 5 == 0 && j != 0){
-                         monster1 = new Monster(Constant.WOLFMAN_PATH,monsterHP + 100,monsterAttack + 10,monsterStep, MAX_BGWIDTH, MAX_BGWIDTH);
+                         monster1 = new Monster(Constant.WOLFMAN_PATH,monsterHP + 100,monsterAttack + 10,monsterStep, MAX_BGWIDTHX, MAX_BGWIDTHY);
                     }
                     else {
-                         monster1 = new Monster(Constant.FATTY_PATH,monsterHP,monsterAttack,monsterStep ,MAX_BGWIDTH, MAX_BGWIDTH);
+                         monster1 = new Monster(Constant.FATTY_PATH,monsterHP,monsterAttack,monsterStep ,MAX_BGWIDTHX, MAX_BGWIDTHY);
                     }
                     monsters.add(monster1);
                     jLayeredPane.add(monster1,Integer.valueOf(800));
@@ -426,12 +427,12 @@ public class MainGameJframe extends JFrame  {
 
                 //炮塔升级模块
                 UpdatePanel updatePanel = new UpdatePanel();
-                updatePanel.setBounds(0,0,MAX_BGWIDTH,MAX_BGWIDTH);
+                updatePanel.setBounds(0,0,MAX_BGWIDTHX,MAX_BGWIDTHY);
                 jLayeredPane.add(updatePanel,Integer.valueOf(2002));
 
                 //炮塔移除模块
                 RemovePanel removePanel = new RemovePanel();
-                removePanel.setBounds(0,0,MAX_BGWIDTH,MAX_BGWIDTH);
+                removePanel.setBounds(0,0,MAX_BGWIDTHX,MAX_BGWIDTHY);
                 jLayeredPane.add(removePanel,Integer.valueOf(2002));
 
                 jLayeredPane.add(t,Integer.valueOf(2000));
@@ -480,7 +481,7 @@ public class MainGameJframe extends JFrame  {
         sbx = e.getX();
         sby = e.getY();
         if (towerHasClickedTowerFlag == true){
-            test.setBounds(sbx-50,sby-90,MAX_BGWIDTH,MAX_BGWIDTH);
+            test.setBounds(sbx-50,sby-90,MAX_BGWIDTHX,MAX_BGWIDTHY);
             test.repaint();
 //                    Tower t = new Tower(1, 140 + (((e.getX() - MAX_LEFT) / MAX_BGWIDTH) - 1) * 32,
 //                            170 + (((e.getY() - MAX_TOP) / MAX_BGWIDTH)) * 32,
@@ -511,8 +512,8 @@ public class MainGameJframe extends JFrame  {
 //        t.setCenterXY(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0,RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0, MAX_BGWIDTH);
 //        t.setBounds(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH, RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH, MAX_BGWIDTH,MAX_BGWIDTH);
         //System.out.println(134+ ((x - MAX_LEFT) / MAX_BGWIDTH) * 32);
-        t.setCenterXY(x,y,MAX_BGWIDTH);
-        t.setBounds(x,y,MAX_BGWIDTH,MAX_BGWIDTH);
+        t.setCenterXY(x,y,MAX_BGWIDTHX);
+        t.setBounds(x,y,MAX_BGWIDTHX,MAX_BGWIDTHY);
     }
 
     public Boolean legalLocation (int x, int y) {
@@ -522,12 +523,36 @@ public class MainGameJframe extends JFrame  {
 //            return false;
 //            //System.out.println(false);
 //        }
-        if ((x/MAX_BGWIDTH==1&&y/MAX_BGWIDTH==5)||(x/MAX_BGWIDTH==1&&y/MAX_BGWIDTH==9)){
-            return false;
+//        if (screenHeight==900&&(x/MAX_BGWIDTHX==1&&Math.round((double)y/MAX_BGWIDTHY)==6)||(x/MAX_BGWIDTHX==1&&Math.round((double)y/MAX_BGWIDTHY)==9)){
+//            return false;
+//        }
+//        if (screenHeight==768&&(x/MAX_BGWIDTHX==1&&Math.round((double)y/MAX_BGWIDTHY)==6)||(x/MAX_BGWIDTHX==1&&Math.round((double)y/MAX_BGWIDTHY)==9)){
+//            return false;
+//        }
+        int offsety = 0;
+        int offsetx = 0;
+        if (screenHeight==768){
+            offsety = 24;
+        }
+        if (screenHeight==720){
+            offsety = 40;
+            if ((x/MAX_BGWIDTHX==1&&y/MAX_BGWIDTHY==6)||(x/MAX_BGWIDTHX==1&&y/MAX_BGWIDTHY==10)){
+                return false;
+            }
         }
 
-        Rectangle rectangle = new Rectangle(x,y,MAX_BGWIDTH,MAX_BGWIDTH);
-        if (x<MAX_RIGHT && x>MAX_LEFT && y>MAX_TOP && y<MAX_BOTTOM && ((y - MAX_TOP) / MAX_BGWIDTH) % 2 == 0){
+
+
+        if (screenWidth==1280){
+            offsetx = 50;
+        }
+        if ((x/MAX_BGWIDTHX==1&&y/MAX_BGWIDTHY==5)||(x/MAX_BGWIDTHX==1&&y/MAX_BGWIDTHY==9)){
+            return false;
+        }
+        System.out.println( y/(MAX_BGWIDTHY+offsety)%2==1);
+
+        Rectangle rectangle = new Rectangle(x,y,MAX_BGWIDTHX,MAX_BGWIDTHY);
+        if (x<(MAX_RIGHT+offsetx) && x>MAX_LEFT && y>MAX_TOP && y<(MAX_BOTTOM+offsety) && y/(MAX_BGWIDTHY+offsety)%2==1){
             for (int i = 0;i<Towers.size();i++){
                 if (rectangle.intersects(Towers.get(i).getRect())){
                     return false;

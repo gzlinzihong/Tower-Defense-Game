@@ -187,7 +187,7 @@ public class Monster extends GameObject implements Runnable{
 
     @Override
     public Rectangle getRect() {
-        return new Rectangle((int)X,(int)Y,(int)width-20,(int)height-20);
+        return new Rectangle((int)X,(int)Y,(int)width,(int)height-(int)height/10);
     }
 
     public int getStep(){
