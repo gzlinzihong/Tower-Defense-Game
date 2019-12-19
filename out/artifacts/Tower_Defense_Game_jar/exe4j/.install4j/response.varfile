@@ -1,0 +1,5 @@
+# install4j response file for exe4j 6.0.1
+executeLauncherAction$Boolean=false
+sys.adminRights$Boolean=true
+sys.installationDir=D\:\\exe4j\\exe4j
+sys.languageId=en

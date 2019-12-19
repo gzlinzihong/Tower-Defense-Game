@@ -21,12 +21,13 @@ public class MainGameJframe extends JFrame  {
     /**
      * 常量
      */
-    static final int MAX_LEFT = 143;// 可放置炮塔的最左部x值
-    static final int MAX_RIGHT = 1059;// 可放置炮塔的最右部x值
-    static final int MAX_TOP = 171;// 可放置炮塔的最顶部y值
-    static final int MAX_BOTTOM = 662;// 可放置炮塔的最底部y值
-    static final int MAX_BGWIDTH = 70;// 每个方块的像素长度
-    static final int RELATIVE_LOCATION = 141;  // 炮塔相对于左上角第一个塔座的距离
+    static final int MAX_LEFT = (int)((double)Constant.sceenwidth*0.042);// 可放置炮塔的最左部x值
+//    (int)((double)Constant.sceenwidth*0.68)
+    static final int MAX_RIGHT = (int)((double)Constant.sceenwidth*0.71);// 可放置炮塔的最右部x值
+    static final int MAX_TOP = (int)((double)Constant.sceenwidth*0.1);// 可放置炮塔的最顶部y值
+    static final int MAX_BOTTOM = (int)((double)Constant.sceenwidth*0.38);// 可放置炮塔的最底部y值
+    static final int MAX_BGWIDTH = (int)((double)Constant.sceenwidth*0.042);// 每个方块的像素长度
+    static final int RELATIVE_LOCATION = MAX_BGWIDTH/2;  // 炮塔相对于左上角第一个塔座的距离
 
     /**
      * map -> 地图
@@ -43,10 +44,6 @@ public class MainGameJframe extends JFrame  {
      */
     ArrayList<Tower> Towers = new ArrayList<>();
 
-    /**
-     * AllMonsters -> 所有怪物集合
-     */
-    Map<Integer,Monster> AllMonsters = new HashMap<>();
 
     /**
      * monsters -> 怪物集合
@@ -96,7 +93,7 @@ public class MainGameJframe extends JFrame  {
     /**
      * test -> 工具人图片
      */
-    private MyImgJpanel test = new MyImgJpanel("Image/tower.png");
+    private MyImgJpanel test = new MyImgJpanel("Image/tank0.png");
 
     /**
      * hasClickedTowerFlag -> 是否点击炮塔标记
@@ -154,6 +151,14 @@ public class MainGameJframe extends JFrame  {
      */
     private JLayeredPane jLayeredPane = this.getLayeredPane();
 
+    private int monsterStep;                                    //从MainStartJframe传过来的值,怪物的步数
+    private int monsterAttack;                                  //从MainStartJframe传过来的值,怪物的攻击力值
+    private int monsterHP;
+
+    public static MyImgJpanel gameover = new MyImgJpanel("Image/gameover.png");
+    public static boolean gameoverflag = false;
+    private static MyImgJpanel victory = new MyImgJpanel("Image/victory.png");
+
     /**
      * Drawing 动画线程类 继承Thread
      */
@@ -161,28 +166,56 @@ public class MainGameJframe extends JFrame  {
     private class Drawing extends Thread{
         @Override
         public void run(){
-            for (int i = 0;i<20;i++){
+            //怪物生成
+            for(int i = 0 ; i < Constant.MAP1_MONSTERS.length - 1 ; i++){
+                for(int j = 0 ; j < Constant.MAP1_MONSTERS[i][0] ; j++){
+                    Monster monster1;
+                    if(j % 3 == 0 && j != 0){
+                         monster1 = new Monster(Constant.DRAGON_PATH,monsterHP + 50,monsterAttack + 5,monsterStep, MAX_BGWIDTH, MAX_BGWIDTH);
+                    }else if(j % 5 == 0 && j != 0){
+                         monster1 = new Monster(Constant.WOLFMAN_PATH,monsterHP + 100,monsterAttack + 10,monsterStep, MAX_BGWIDTH, MAX_BGWIDTH);
+                    }
+                    else {
+                         monster1 = new Monster(Constant.FATTY_PATH,monsterHP,monsterAttack,monsterStep ,MAX_BGWIDTH, MAX_BGWIDTH);
+                    }
+                    monsters.add(monster1);
+                    jLayeredPane.add(monster1,Integer.valueOf(800));
 
-                /**
-                 * 怪物生成
-                 */
-                Monster monster1 = new Monster("Image/tank.png", monsterSpeed, MAX_BGWIDTH, MAX_BGWIDTH,monsters.size());
-                monsters.add(monster1);
-                jLayeredPane.add(monster1,Integer.valueOf(800));
+                    try {
+                        sleep(monster1.getInterval(Constant.MAP1_MONSTERS[i][1],Constant.MAP1_MONSTERS[i][2]));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //修改怪物血量以及速度
+                monsterHP += 30;
+                if(monsterStep == 1){
+                    continue;
+                }
+                monsterStep--;
+            }
+            new JudgeVictory().start();
+        }
+    }
+
+    private class JudgeVictory extends Thread{
+        @Override
+        public void run(){
+            while (monsters.size()!=0){
                 try {
-                    sleep(2000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-
+            victory.setVisible(true);
         }
     }
 
     private class JudgeMonstersDeath extends Thread{
         @Override
         public void run(){
-            while (true){
+            while (gameoverflag==false){
 
                 try {
                     Thread.sleep(500);
@@ -204,7 +237,7 @@ public class MainGameJframe extends JFrame  {
     private class JudgeTowersDeath extends Thread{
         @Override
         public void run(){
-            while (true){
+            while (gameoverflag==false){
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -226,15 +259,17 @@ public class MainGameJframe extends JFrame  {
 
 
 
-    public MainGameJframe(int monsterInterval,int monsterSpeed){
+    public MainGameJframe(int monsterInterval,int monsterStep,int monsterAttack,int monsterHP){
         super("Tower Defense Game");
         this.monsterInterval = monsterInterval;
-        this.monsterSpeed = monsterSpeed;
+        this.monsterStep = monsterStep;
+        this.monsterAttack = monsterAttack;
+        this.monsterHP = monsterHP;
         this.initComponents();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (true){
+                while (gameoverflag==false){
                     GameMusic.Play("bgm/bgm.wav");
                 }
 
@@ -268,21 +303,30 @@ public class MainGameJframe extends JFrame  {
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //设置用户在此窗体上发起 "close" 时默认执行System.exit(0)
+        gameover.setBounds((int)((double)screenWidth*0.052),(int)((double)screenHeight*0.065),(int)((double)screenWidth*0.78),(int)((double)screenHeight*0.65));
+        gameover.setVisible(false);
+        gameover.setBackground(null);
+        gameover.setOpaque(false);
+        jLayeredPane.add(gameover,Integer.valueOf(10000));
+
+        victory.setBounds((int)((double)screenWidth*0.052),(int)((double)screenHeight*0.065),(int)((double)screenWidth*0.78),(int)((double)screenHeight*0.65));
+        victory.setVisible(false);
+        victory.setBackground(null);
+        victory.setOpaque(false);
+        jLayeredPane.add(victory,Integer.valueOf(10000));
 
 
         this.setLayout(null);
         //将容器的布局设为绝对布局
 
-        this.setBounds(100,100,screenWidth-200,screenHeight-200);
-        System.out.println(screenWidth-200);
-        System.out.println(screenHeight-200);
+        this.setBounds((int)((double)screenWidth*0.052),(int)((double)screenHeight*0.093),screenWidth-screenWidth/10,(int)(screenHeight-((double)screenHeight*0.186)));
         //窗口大小以及位置
 
 
         this.map = new MyImgJpanel("Image/map.png");
         //生成地图
 
-        map.setBounds(0,4,1190,770);
+        map.setBounds(0,4,screenWidth-screenWidth/10,(int)(screenHeight-((double)screenHeight*0.186)));
         jLayeredPane.add(map, Integer.valueOf(100));
         //地图大小位置
 
@@ -302,13 +346,17 @@ public class MainGameJframe extends JFrame  {
 
 
 
-        moneytitile = new MyJlabel(this,"金币:",550,30,100,100);
-        HPtitle = new MyJlabel(this,"血量:",550,100,100,100);
-        money = new MyJlabel(this,"0",400,30,100,100);
-        HP = new MyJlabel(this,"100",400,100,100,100);
+        moneytitile = new MyJlabel(this,"金币:",(int)(((double)screenWidth*0.23)),(int)(((double)screenHeight*0.028)),100,100);
+        HPtitle = new MyJlabel(this,"血量:",(int)(((double)screenWidth*0.23)),(int)(((double)screenHeight*0.093)),100,100);
+        money = new MyJlabel(this,"60",(int)(((double)screenWidth*0.16)),(int)(((double)screenHeight*0.028)),100,100);
+        HP = new MyJlabel(this,"100",(int)(((double)screenWidth*0.16)),(int)(((double)screenHeight*0.093)),100,100);
+        jLayeredPane.add(moneytitile,Integer.valueOf(200));
+        jLayeredPane.add(HPtitle,Integer.valueOf(200));
+        jLayeredPane.add(money,Integer.valueOf(200));
+        jLayeredPane.add(HP,Integer.valueOf(200));
 
         fireball = new MyImgJpanel("Image/rock.png");
-        fireball.setBounds(screenWidth-500,500,100,100);
+        fireball.setBounds((int)(screenWidth-((double)screenWidth*0.20)),(int)(((double)screenHeight*0.46)),100,100);
         jLayeredPane.add(fireball,Integer.valueOf(400));
         fireball.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
@@ -322,14 +370,13 @@ public class MainGameJframe extends JFrame  {
         });
 
 
-        this.tower = new MyImgJpanel("Image/tower.png");
-        tower.setBounds(screenWidth-500,300,100,100);
+        this.tower = new MyImgJpanel("Image/tank0.png");
+        tower.setBounds((int)(screenWidth-((double)screenWidth*0.20)),(int)(((double)screenHeight*0.28)),100,100);
         jLayeredPane.add(tower,Integer.valueOf(700));
 
 
         tower.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         //炮塔光标
-        add(tower);
 
 
         tower.addMouseListener(new MouseAdapter() {
@@ -356,14 +403,16 @@ public class MainGameJframe extends JFrame  {
 
     }
     public void jframeClick(MouseEvent e){
+        System.out.println(e.getX()+"  "+e.getY());
         if (towerHasClickedTowerFlag == true) {
             towerIsPutDownFlag = true;
-            if (towerIsPutDownFlag == true && legalLocation(e.getX(),e.getY())) {
+            if (towerIsPutDownFlag == true && legalLocation(e.getX(),e.getY())&&Integer.valueOf(money.getText())>=20) {
 
                 /**
                  * 生成炮塔
                  */
-                Tower t = new Tower("Image/tank4.png");
+                money.setText(String.valueOf(Integer.valueOf(money.getText()) - 20));
+                Tower t = new Tower("Image/tank0.png");
                 t.setArray(monsters);
                 Thread t1 = new Thread(t);
                 for (Monster monster:monsters){
@@ -406,8 +455,8 @@ public class MainGameJframe extends JFrame  {
             fireBallIsPutDownFlag = true;
             if (fireBallIsPutDownFlag == true) {
                 fireBalltest.setBounds(sbx-140,sby-100,250,120);
-                    fireball = new FireBall(fireBalltest,e.getX()-140,e.getY()-100);
-                    jLayeredPane.add(fireball,Integer.valueOf(1001));
+                    fireball = new FireBall(fireBalltest,e.getX(),e.getY());
+                    jLayeredPane.add(fireball,Integer.valueOf(2001));
 //                fireball = new FireBall(fireBalltest,e.getX()-140,e.getY()-100);
 //                jLayeredPane.add(fireball,Integer.valueOf(1001));
 //            Bullet bullet = new Bullet(10,10);
@@ -431,7 +480,7 @@ public class MainGameJframe extends JFrame  {
         sbx = e.getX();
         sby = e.getY();
         if (towerHasClickedTowerFlag == true){
-            test.setBounds(sbx-50,sby-90,100,100);
+            test.setBounds(sbx-50,sby-90,MAX_BGWIDTH,MAX_BGWIDTH);
             test.repaint();
 //                    Tower t = new Tower(1, 140 + (((e.getX() - MAX_LEFT) / MAX_BGWIDTH) - 1) * 32,
 //                            170 + (((e.getY() - MAX_TOP) / MAX_BGWIDTH)) * 32,
@@ -444,23 +493,6 @@ public class MainGameJframe extends JFrame  {
         }
     }
 
-    /**
-     *
-     * @param money
-     * 设置money
-     */
-    public void setMoney(int money){
-        this.money.setText(String.valueOf(money));
-    }
-
-    /**
-     *
-     * @param HP
-     * 设置血量
-     */
-    public void setHP(int HP){
-        this.HP.setText(String.valueOf(HP));
-    }
 
 //    public void getModify(){
 //                try {
@@ -474,18 +506,37 @@ public class MainGameJframe extends JFrame  {
 //
 //    }
     public void setLocation(int x,int  y, Tower t) {
-        t.setCenterXY(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0,RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0, MAX_BGWIDTH);
-        t.setBounds(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH, RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH, MAX_BGWIDTH,MAX_BGWIDTH);
+        x = x-50;
+        y = y-90;
+//        t.setCenterXY(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0,RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH + MAX_BGWIDTH / 2.0, MAX_BGWIDTH);
+//        t.setBounds(RELATIVE_LOCATION + ((x - MAX_LEFT) / MAX_BGWIDTH) * MAX_BGWIDTH, RELATIVE_LOCATION + (((y - MAX_TOP) / MAX_BGWIDTH)) * MAX_BGWIDTH, MAX_BGWIDTH,MAX_BGWIDTH);
         //System.out.println(134+ ((x - MAX_LEFT) / MAX_BGWIDTH) * 32);
+        t.setCenterXY(x,y,MAX_BGWIDTH);
+        t.setBounds(x,y,MAX_BGWIDTH,MAX_BGWIDTH);
     }
 
     public Boolean legalLocation (int x, int y) {
-        if (x < MAX_RIGHT && x > MAX_LEFT && y > MAX_TOP && y < MAX_BOTTOM && (x - MAX_LEFT) / MAX_BGWIDTH % 2 == 0 && ((y - MAX_TOP) / MAX_BGWIDTH) % 2 == 0) {
-            return true;
-           //System.out.println(true);
-        } else {
+//        if (x < MAX_RIGHT && x > MAX_LEFT && y > MAX_TOP && y < MAX_BOTTOM && (x - MAX_LEFT) / MAX_BGWIDTH % 2 == 0 && ((y - MAX_TOP) / MAX_BGWIDTH) % 2 == 0) {
+//            return true;
+//        } else {
+//            return false;
+//            //System.out.println(false);
+//        }
+        if ((x/MAX_BGWIDTH==1&&y/MAX_BGWIDTH==5)||(x/MAX_BGWIDTH==1&&y/MAX_BGWIDTH==9)){
             return false;
-            //System.out.println(false);
+        }
+
+        Rectangle rectangle = new Rectangle(x,y,MAX_BGWIDTH,MAX_BGWIDTH);
+        if (x<MAX_RIGHT && x>MAX_LEFT && y>MAX_TOP && y<MAX_BOTTOM && ((y - MAX_TOP) / MAX_BGWIDTH) % 2 == 0){
+            for (int i = 0;i<Towers.size();i++){
+                if (rectangle.intersects(Towers.get(i).getRect())){
+                    return false;
+                }
+            }
+            return true;
+        }
+        else {
+            return false;
         }
     }
 

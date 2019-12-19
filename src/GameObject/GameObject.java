@@ -2,7 +2,6 @@ package GameObject;
 
 import MyClass.MyImgJpanel;
 
-import javax.swing.*;
 import java.awt.*;
 
 /**

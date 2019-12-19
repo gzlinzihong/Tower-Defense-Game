@@ -1,0 +1,423 @@
+[INFO] logger started at Tue Dec 17 20:43:24 GMT+08:00 2019
+[INFO] executable name: D:\exe4j\exe4j_windows-x64_6_0_1.exe
+[INFO] install4j version: @VERSION@ (build @BUILD_NUMBER@)
+[INFO] Properties: 
+-- listing properties --
+java.runtime.name=Java(TM) SE Runtime Environment
+exe4j.moduleName=D:\exe4j\exe4j_windows-x64_6_0_1.exe
+sun.boot.library.path=e:\jdk\bin
+exe4j.semaphoreName=Local\d:_exe4j_exe4j_windows-x64_6_0_...
+java.vm.version=25.231-b11
+java.vm.vendor=Oracle Corporation
+java.vendor.url=http://java.oracle.com/
+path.separator=;
+exe4j.consoleCodepage=cp0
+java.vm.name=Java HotSpot(TM) 64-Bit Server VM
+file.encoding.pkg=sun.io
+user.script=
+user.country=CN
+sun.os.patch.level=
+install4j.exeDir=D:\exe4j\
+java.vm.specification.name=Java Virtual Machine Specification
+user.dir=C:\Users\∫Ÿ¡÷Ë˜~1\AppData\Local\Temp\e4j...
+java.runtime.version=1.8.0_231-b11
+java.awt.graphicsenv=sun.awt.Win32GraphicsEnvironment
+java.endorsed.dirs=e:\jdk\lib\endorsed
+os.arch=amd64
+java.io.tmpdir=C:\Users\∫Ÿ¡÷Ë˜~1\AppData\Local\Temp\
+line.separator=
+
+java.vm.specification.vendor=Oracle Corporation
+user.variant=
+exe4j.tempDir=C:\Users\∫Ÿ¡÷Ë˜~1\AppData\Local\Temp\e4j...
+os.name=Windows 10
+sun.java2d.noddraw=true
+sun.jnu.encoding=GBK
+java.library.path=C:\Users\∫Ÿ¡÷Ë˜~1\AppData\Local\Temp\e4j...
+sun.awt.enableExtraMouseButtons=true
+java.specification.name=Java Platform API Specification
+java.class.version=52.0
+sun.management.compiler=HotSpot 64-Bit Tiered Compilers
+exe4j.isInstall4j=true
+os.version=10.0
+user.home=C:\Users\∫Ÿ ¡÷Ë˜∫Ë
+user.timezone=GMT+08:00
+java.awt.printerjob=sun.awt.windows.WPrinterJob
+java.specification.version=1.8
+file.encoding=GBK
+user.name=∫Ÿ ¡÷Ë˜∫Ë
+java.class.path=C:\Users\∫Ÿ¡÷Ë˜~1\AppData\Local\Temp\e4j...
+java.vm.specification.version=1.8
+sun.arch.data.model=64
+java.home=e:\jdk
+sun.java.command=D:\exe4j\exe4j_windows-x64_6_0_1.exe
+exe4j.launchName=D:\exe4j\exe4j_windows-x64_6_0_1.exe
+java.specification.vendor=Oracle Corporation
+user.language=zh
+awt.toolkit=sun.awt.windows.WToolkit
+java.vm.info=mixed mode
+exe4j.unextractedPosition=1475986
+java.version=1.8.0_231
+java.ext.dirs=e:\jdk\lib\ext;C:\WINDOWS\Sun\Java\li...
+sun.boot.class.path=e:\jdk\lib\resources.jar;e:\jdk\lib\r...
+java.vendor=Oracle Corporation
+install4j.appDir=C:\Users\∫Ÿ ¡÷Ë˜∫Ë\AppData\Local\Temp\
+file.separator=\
+java.vendor.url.bug=http://bugreport.sun.com/bugreport/
+sun.cpu.endian=little
+sun.io.unicode.encoding=UnicodeLittle
+sun.desktop=windows
+sun.cpu.isalist=amd64
+[INFO] Variable changed: sys.resolveUserSpecificInstallationDir=false[class java.lang.String]
+[INFO] my modules file null, null
+[INFO] com.install4j.runtime.beans.actions.misc.RequestPrivilegesAction [ID 165]: Execute action
+       Property allRequested: false
+       Property failIfNotObtainedMac: true
+       Property failIfNotObtainedWin: true
+       Property failIfNotRootUnix: false
+       Property obtainIfAdminMac: false
+       Property obtainIfAdminWin: true
+       Property obtainIfNormalMac: false
+       Property obtainIfNormalWin: false
+       Property rollbackSupported: false
+       Property updateInstallationDirectory: true
+       Using communication backend com.install4j.runtime.installer.platform.win32.Win32CommunicationBackend
+       Variable changed: sys.adminRights=true[class java.lang.Boolean]
+       Execute action successful after 2107 ms
+[INFO] com.install4j.runtime.beans.screens.StartupScreen [ID 15]: command: move 1 screens, executing actions, checking condition
+[INFO] com.install4j.runtime.beans.screens.WelcomeScreen [ID 20]: Show screen
+[INFO] com.install4j.runtime.beans.screens.WelcomeScreen [ID 20]: command: move 1 screens, executing actions, checking condition
+[INFO] com.install4j.runtime.beans.screens.LicenseScreen [ID 21]: Show screen
+[INFO] com.install4j.runtime.beans.screens.LicenseScreen [ID 21]: command: move 1 screens, executing actions, checking condition
+[INFO] com.install4j.runtime.beans.screens.InstallationDirectoryScreen [ID 22]: Show screen
+       Variable changed: sys.installationDir=D:\exe4j\exe4j[class java.lang.String]
+       checking writable with maximum
+[INFO] com.install4j.runtime.beans.actions.misc.LoadResponseFileAction [ID 75]: Execute action
+       Property excludedVariables: [sys.installationDir]
+       Property file: null
+       Property overwriteStrategy: Do not overwrite command line
+       Property registerForResponseFile: true
+       Property rollbackSupported: true
+       Response file D:\exe4j\exe4j\.install4j\response.varfile does not exist
+       Execute action successful after 11 ms
+[INFO] com.install4j.runtime.beans.screens.InstallationDirectoryScreen [ID 22]: command: move 1 screens, executing actions, checking condition
+[INFO] com.install4j.runtime.beans.screens.InstallationScreen [ID 26]: Show screen
+[INFO] com.install4j.runtime.beans.actions.misc.CheckRunningProcessesAction [ID 303]: Execute action
+       Property additionalExecutables: null
+       Property closeStrategy: Ask user to manually close
+       Property message: install4j has detected that  exe4j is currently running.
+
+Please close the following processes, then click Retry to continue, or Cancel to exit.
+       Property timeOut: 5000
+       Property allowIgnore: false
+       Property includeLaunchers: true
+       Property rollbackSupported: true
+       Execute action successful after 60 ms
+[INFO] com.install4j.runtime.beans.actions.files.DeleteFileAction [ID 117]: Execute action
+       Property directoryFilter: null
+       Property fileFilter: null
+       Property files: [lib]
+       Property filesRoot: null
+       Property backupForRollback: true
+       Property recursive: true
+       Property rollbackSupported: true
+       Property showFileNames: true
+       Property showProgress: false
+       The file "D:\exe4j\exe4j\lib" does not exist
+       Execute action successful after 35 ms
+[INFO] com.install4j.runtime.beans.actions.InstallFilesAction [ID 28]: Execute action
+       Property directoryResolverScript: null
+       Property fileFilterScript: null
+       Property sizeCalculatorScript: null
+       Property checkFreeSpace: true
+       Property delay: false
+       Property installRuntime: true
+       Property rollbackSupported: true
+       Property saveDownloadedFiles: false
+       Property showFileNames: true
+       Property triggerReboot: true
+       Property updateBundledJre: true
+       Property validateApplicationId: false
+       checking writable with maximum
+       Install file: D:\exe4j\exe4j\.install4j\i4jdel.exe; size: 91120 bytes; exists: false
+       File options set to: [fileTime: Fri Aug 24 22:28:26 GMT+08:00 2018, mode: 644, overwriteMode: Always ask except for update, shared: false, uninstallMode: If created, delayIfNecessary: false]
+       Install file: D:\exe4j\exe4j\.install4j\i4jinst.dll; size: 170496 bytes; exists: false
+       Install file: D:\exe4j\exe4j\README.txt; size: 1719 bytes; exists: false
+       File options set to: [fileTime: Fri Aug 24 22:28:26 GMT+08:00 2018, mode: 644, overwriteMode: If newer otherwise ask, shared: false, uninstallMode: If created, delayIfNecessary: false]
+       Install file: D:\exe4j\exe4j\bin\ant.jar; size: 7760 bytes; exists: false
+       Install file: D:\exe4j\exe4j\bin\exe4j.exe; size: 345632 bytes; exists: false
+       File options set to: [fileTime: Fri Aug 24 22:28:26 GMT+08:00 2018, mode: 755, overwriteMode: If newer otherwise ask, shared: false, uninstallMode: If created, delayIfNecessary: false]
+       Install file: D:\exe4j\exe4j\bin\exe4j.jar; size: 1067696 bytes; exists: false
+       File options set to: [fileTime: Fri Aug 24 22:28:26 GMT+08:00 2018, mode: 644, overwriteMode: If newer otherwise ask, shared: false, uninstallMode: If created, delayIfNecessary: false]
+       Install file: D:\exe4j\exe4j\bin\exe4jc.exe; size: 305696 bytes; exists: false
+       File options set to: [fileTime: Fri Aug 24 22:28:26 GMT+08:00 2018, mode: 755, overwriteMode: If newer otherwise ask, shared: false, uninstallMode: If created, delayIfNecessary: false]
+       Install file: D:\exe4j\exe4j\config\config_template.xml; size: 72 bytes; exists: false
+       File options set to: [fileTime: Fri Aug 24 22:28:26 GMT+08:00 2018, mode: 644, overwriteMode: If newer otherwise ask, shared: false, uninstallMode: If created, delayIfNecessary: false]
+       Install file: D:\exe4j\exe4j\config\template.exe4j; size: 203 bytes; exists: false
+       Install file: D:\exe4j\exe4j\config\transforms\transform_1.replacements; size: 558 bytes; exists: false
+       Install file: D:\exe4j\exe4j\config\transforms\transform_1.xsl; size: 560 bytes; exists: false
+       Install file: D:\exe4j\exe4j\config\transforms\transform_2.xsl; size: 912 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\cli\HelloCli.class; size: 528 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\cli\HelloCli.java; size: 184 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\cli\hello.exe; size: 367104 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\cli\hello.exe4j; size: 1884 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\gui\HelloGui$1.class; size: 646 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\gui\HelloGui$2$1.class; size: 1121 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\gui\HelloGui$2.class; size: 837 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\gui\HelloGui.class; size: 3932 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\gui\HelloGui.java; size: 3749 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\gui\hello.bmp; size: 276054 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\gui\hello.exe; size: 473088 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\gui\hello.exe4j; size: 2022 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\gui\hello.ico; size: 40280 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\service\ServiceDemo$ShutdownThread.class; size: 1164 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\service\ServiceDemo.class; size: 2097 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\service\ServiceDemo.java; size: 1870 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\service\service.exe4j; size: 1895 bytes; exists: false
+       Install file: D:\exe4j\exe4j\demo\service\svc_demo.exe; size: 374784 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\cli\$folder$.html; size: 2200 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\cli\ant.html; size: 6920 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\cli\cli.html; size: 3062 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\cli\options.html; size: 4114 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\cli\relative.html; size: 1693 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\help.pdf; size: 274609 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\add_16.png; size: 291 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\add_16@2x.png; size: 375 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cover.png; size: 55134 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cpe_archive_16.png; size: 481 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cpe_archive_16@2x.png; size: 514 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cpe_directory_16.png; size: 415 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cpe_directory_16@2x.png; size: 549 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cpe_envvar_16.png; size: 757 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cpe_envvar_16@2x.png; size: 1479 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cpe_fail_on_error_16.png; size: 319 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cpe_fail_on_error_16@2x.png; size: 543 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cpe_scan_directory_16.png; size: 535 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\cpe_scan_directory_16@2x.png; size: 931 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\down_16.png; size: 357 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\down_16@2x.png; size: 723 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\help_bullet_16.png; size: 510 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\help_folder_closed_18@2x.png; size: 661 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\help_overview.png; size: 494 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\help_overview_18@2x.png; size: 973 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\help_section_bullet_16.png; size: 315 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\help_section_bullet_16@2x.png; size: 398 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\help_topic_18@2x.png; size: 725 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\overridden_16.png; size: 514 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\overridden_16@2x.png; size: 979 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\remove_16.png; size: 482 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\remove_16@2x.png; size: 872 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\sse_directory_16.png; size: 415 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\sse_directory_16@2x.png; size: 549 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\sse_envvar_16.png; size: 757 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\sse_envvar_16@2x.png; size: 1479 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\sse_registry_16.png; size: 590 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\sse_registry_16@2x.png; size: 953 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\up_16.png; size: 364 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\up_16@2x.png; size: 717 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\images\wizard.png; size: 24884 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\index.html; size: 1556 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\licensing.html; size: 3905 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\splash\$folder$.html; size: 1852 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\splash\singleInstance.html; size: 3698 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\splash\splash.html; size: 3603 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\code.html; size: 12430 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\content.js; size: 1673 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\favicon.ico; size: 31702 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\fonts.css; size: 318 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\fonts\iconfu.woff; size: 1312 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\fonts\os.ttf; size: 36492 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\fonts\osb.ttf; size: 38108 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\fonts\osi.ttf; size: 34416 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\heading.html; size: 263 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\help.css; size: 3489 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\help_common.css; size: 165 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\content-shadow.png; size: 1090 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\executable.png; size: 1090 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\keyboard_arrow_down.png; size: 442 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\keyboard_arrow_down@2x.png; size: 607 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\keyboard_arrow_left.png; size: 406 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\keyboard_arrow_left@2x.png; size: 572 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\keyboard_arrow_right.png; size: 409 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\keyboard_arrow_right@2x.png; size: 550 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\keyboard_arrow_up.png; size: 440 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\keyboard_arrow_up@2x.png; size: 579 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\menu.png; size: 360 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\images\menu@2x.png; size: 422 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\jqtree-circle.png; size: 239 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\jqtree.css; size: 2893 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\jquery.min.js; size: 93107 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\menu_empty.html; size: 172 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\mtmcode.js; size: 21261 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\reset.css; size: 670 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\standalone.css; size: 3298 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\tree.jquery.js; size: 92174 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\tree.js; size: 4855 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\standalone\tree_data.js; size: 3806 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\welcome.html; size: 2598 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\$advancedFolder$.html; size: 3525 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\$folder$.html; size: 4174 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\64bit.html; size: 2623 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\application.html; size: 4125 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\compile.html; size: 2047 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\dialogs\$folder$.html; size: 2530 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\dialogs\classpath.html; size: 7304 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\dialogs\mainClass.html; size: 2005 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\dialogs\searchSequence.html; size: 3656 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\dialogs\visual.html; size: 2670 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\executable.html; size: 7303 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\executionLevel.html; size: 3921 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\finish.html; size: 2421 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\java.html; size: 11320 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\jdk.html; size: 4588 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\messages.html; size: 3817 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\native.html; size: 3732 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\projectType.html; size: 3157 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\redirection.html; size: 3220 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\searchSequence.html; size: 7485 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\service.html; size: 6279 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\splashScreen.html; size: 3036 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\splashScreenOptions.html; size: 4400 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\versionInfo.html; size: 4163 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\vmType.html; size: 3566 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\welcome.html; size: 3637 bytes; exists: false
+       Install file: D:\exe4j\exe4j\doc\wizard\wizard.html; size: 4443 bytes; exists: false
+       Install file: D:\exe4j\exe4j\exe4jlib.jar; size: 31591 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\allclasses-frame.html; size: 978 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\allclasses-noframe.html; size: 918 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\com\exe4j\Controller.ConnectionException.html; size: 7257 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\com\exe4j\Controller.StartupListener.html; size: 8145 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\com\exe4j\Controller.html; size: 12283 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\com\exe4j\package-frame.html; size: 1209 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\com\exe4j\package-summary.html; size: 5972 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\com\exe4j\package-tree.html; size: 4612 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\constant-values.html; size: 3637 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\deprecated-list.html; size: 3587 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\help-doc.html; size: 8022 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\index-all.html; size: 6771 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\index.html; size: 2753 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\overview-tree.html; size: 4624 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\package-list; size: 10 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\script.js; size: 827 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\serialized-form.html; size: 4049 bytes; exists: false
+       Install file: D:\exe4j\exe4j\javadoc\stylesheet.css; size: 12842 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\alloy.jar; size: 222751 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\batik-all-1.10.jar; size: 3471978 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\commons-compress-1.4.1.jar; size: 169202 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\commons-io-1.3.1.jar; size: 59059 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\commons-logging-1.0.4.jar; size: 40908 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\commons-math-2.2.jar; size: 628441 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\guava-18.0.jar; size: 955048 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\idea-laf.jar; size: 2903452 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\jargs-1.0.jar; size: 4841 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\javahelp-2.0.05.jar; size: 313954 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\jclasslib-data-5.3.jar; size: 166016 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\jdom2-2.0.6.jar; size: 176107 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\jide-3.7.4.jar; size: 3459831 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\jna-platform.jar; size: 508712 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\jna.jar; size: 3716263 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\jool-0.9.12.jar; size: 600435 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\kotlin-reflect-1.2.60.jar; size: 1010800 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\kotlin-stdlib-1.2.60.jar; size: 786533 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\kotlin-stdlib-common-1.2.60.jar; size: 159665 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\kotlin-stdlib-jdk7-1.2.60.jar; size: 2037 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\kotlin-stdlib-jdk8-1.2.60.jar; size: 5936 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\miglayout-core-4.2.jar; size: 52258 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\miglayout-swing-4.2.jar; size: 10922 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\xml-apis-ext-1.3.04.jar; size: 46535 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\xmlgraphics-commons-2.2.jar; size: 460089 bytes; exists: false
+       Install file: D:\exe4j\exe4j\lib\xz-1.0.jar; size: 44024 bytes; exists: false
+       Install file: D:\exe4j\exe4j\license.html; size: 12539 bytes; exists: false
+       Install file: D:\exe4j\exe4j\license.txt; size: 11406 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\i4jdel.exe; size: 91120 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\manifest; size: 1256 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\manifest.64; size: 1260 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\manifest.dpi; size: 1508 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\manifest.dpi.64; size: 1513 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\messages\languages; size: 31 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\messages\messages_de.utf8; size: 2331 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\messages\messages_en.utf8; size: 2049 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\messages\messages_fr.utf8; size: 2241 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\winln.bin; size: 215552 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\winln.bin.64; size: 256512 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\winsvc.bin; size: 223232 bytes; exists: false
+       Install file: D:\exe4j\exe4j\resource\winsvc.bin.64; size: 266752 bytes; exists: false
+       Install file: D:\exe4j\exe4j\uninstall.exe; size: 726048 bytes; exists: false
+       File options set to: [fileTime: Fri Aug 24 22:28:26 GMT+08:00 2018, mode: 700, overwriteMode: If newer otherwise ask, shared: false, uninstallMode: If created, delayIfNecessary: false]
+       Install file: D:\exe4j\exe4j\.install4j\inst_jre.cfg; size: 8 bytes; exists: false
+       File options set to: [fileTime: Tue Dec 17 20:43:57 GMT+08:00 2019, mode: 644, overwriteMode: Always, shared: false, uninstallMode: If created, delayIfNecessary: false]
+       Install file: D:\exe4j\exe4j\.install4j\i4jruntime.jar; size: 1740853 bytes; exists: false
+       File options set to: [fileTime: Tue Dec 17 20:43:57 GMT+08:00 2019, mode: 644, overwriteMode: Always, shared: false, uninstallMode: Always, delayIfNecessary: false]
+       Install file: D:\exe4j\exe4j\.install4j\MessagesDefault; size: 33678 bytes; exists: false
+       Install file: D:\exe4j\exe4j\.install4j\i4jparams.conf; size: 71850 bytes; exists: false
+       Install file: D:\exe4j\exe4j\.install4j\stats.properties; size: 1279 bytes; exists: false
+       Install file: D:\exe4j\exe4j\.install4j\user.jar; size: 7593 bytes; exists: false
+       Install file: D:\exe4j\exe4j\.install4j\i4j_extf_0_7exk44.utf8; size: 33678 bytes; exists: false
+       Install file: D:\exe4j\exe4j\.install4j\i4j_extf_1_7exk44.html; size: 12539 bytes; exists: false
+       Install file: D:\exe4j\exe4j\.install4j\i4j_extf_2_7exk44_pz5z9g.ico; size: 34348 bytes; exists: false
+       Install file: D:\exe4j\exe4j\.install4j\i4j_extf_3_7exk44_18gg8kx.png; size: 9202 bytes; exists: false
+       Install file: D:\exe4j\exe4j\.install4j\i4j_extf_3_7exk44_18gg8kx@2x.png; size: 15419 bytes; exists: false
+       Install file: D:\exe4j\exe4j\.install4j\installer.ico; size: 15749 bytes; exists: false
+       Execute action successful after 16024 ms
+[INFO] com.install4j.runtime.beans.actions.desktop.CreateProgramGroupAction [ID 29]: Execute action
+       Property categories: Application
+       Property linkDirectory: /usr/local/bin
+       Property programGroupEntryConfigs: [ProgramGroupFileConfig{target=doc\help.pdf, arguments='', runAsAdministrator=false}, ProgramGroupFileConfig{target=doc\index.html, arguments='', runAsAdministrator=false}]
+       Property programGroupName: exe4j
+       Property uninstallerMenuName: exe4j Uninstaller
+       Property addDefaultLauncherLinks: true
+       Property addUninstaller: false
+       Property allUsers: false
+       Property failForSymlinksNotCreated: false
+       Property rollbackSupported: true
+       Property unixMenuEntries: true
+       Property unixSymlinks: true
+       Variable changed: sys.programGroupName=exe4j[class java.lang.String]
+       Variable changed: sys.symlinkDir=/usr/local/bin[class java.lang.String]
+       Install file: C:\Users\∫Ÿ ¡÷Ë˜∫Ë\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\exe4j\exe4j Wizard.lnk; size: 795 bytes; exists: false
+       File options set to: [fileTime: Tue Dec 17 20:43:58 GMT+08:00 2019, mode: 644, overwriteMode: Always, shared: false, uninstallMode: Always, delayIfNecessary: false]
+       Install file: C:\Users\∫Ÿ ¡÷Ë˜∫Ë\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\exe4j\Documentation\exe4j Printable Manual.lnk; size: 734 bytes; exists: false
+       File options set to: [fileTime: Tue Dec 17 20:43:58 GMT+08:00 2019, mode: 644, overwriteMode: Always, shared: false, uninstallMode: Always, delayIfNecessary: false]
+       Install file: C:\Users\∫Ÿ ¡÷Ë˜∫Ë\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\exe4j\Documentation\exe4j Help.lnk; size: 742 bytes; exists: false
+       File options set to: [fileTime: Tue Dec 17 20:43:58 GMT+08:00 2019, mode: 644, overwriteMode: Always, shared: false, uninstallMode: Always, delayIfNecessary: false]
+       Execute action successful after 337 ms
+[INFO] com.install4j.runtime.beans.actions.desktop.RegisterAddRemoveAction [ID 30]: Execute action
+       Property icon: null
+       Property iconSource: Installer icon
+       Property itemName: exe4j 6.0.1
+       Property persistentProperties: {}
+       Property rollbackSupported: true
+       Execute action successful after 21 ms
+[INFO] com.install4j.runtime.beans.actions.desktop.CreateFileAssociationAction [ID 31]: Execute action
+       Property description: exe4j project files
+       Property extension: exe4j
+       Property launcherId: 2
+       Property macIconFile: 
+       Property macRole: Viewer
+       Property persistentProperties: {}
+       Property winAdditionalParameters: null
+       Property windowsIconFile: i4j_extf_2_7exk44_pz5z9g.ico
+       Property mac: false
+       Property restartFinder: false
+       Property rollbackSupported: true
+       Property selected: true
+       Property windows: true
+       using internal name exe4j
+       Execute action successful after 23 ms
+[INFO] com.install4j.runtime.beans.actions.files.AddWindowsFileRightsAction [ID 217]: Execute action
+       Property files: [demo]
+       Property group: Authenticated users
+       Property sidOrAccountName: null
+       Property all: true
+       Property execute: false
+       Property read: false
+       Property rollbackSupported: false
+       Property write: false
+       Execute action successful after 54 ms
+[INFO] com.install4j.runtime.beans.screens.InstallationScreen [ID 26]: Rollback barrier reached
+       command: move 1 screens, executing actions, checking condition
+[INFO] com.install4j.runtime.beans.screens.FinishedScreen [ID 32]: Show screen
+       Variable changed: executeLauncherAction=false[class java.lang.Boolean]
+[INFO] com.install4j.runtime.beans.screens.FinishedScreen [ID 32]: command: finish
+       cleaning up
+       Finished

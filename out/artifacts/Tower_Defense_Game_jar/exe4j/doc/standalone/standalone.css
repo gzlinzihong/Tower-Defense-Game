@@ -1,0 +1,209 @@
+@import "reset.css";
+
+@font-face {
+    font-family: "iconfu";
+    src: url("fonts/iconfu.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.header {
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 60px;
+    background-image: linear-gradient(to bottom, #50B6FA 2%, #1C91DC 98%);
+    background-repeat: repeat-x;
+    background-color: #0072BC;
+}
+
+#heading {
+    padding-top: 10pt;
+    display: block;
+    color: white;
+    font-size: 18pt;
+    font-weight: bold;
+}
+
+.jqtree-tree a {
+    background:transparent;
+    text-decoration: none;
+}
+
+.body {
+    top: 60px;
+    bottom: 0;
+}
+
+.menu {
+    left: 0;
+    width: 280px;
+}
+
+.content {
+    left: 295px;
+    right: 0;
+}
+
+.ios-scroll {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll !important;
+}
+
+#content-shadow {
+    background-image: url("images/content-shadow.png");
+    background-repeat: no-repeat;
+    height: 766px;
+    top: 0;
+    left: 284px;
+    position: absolute;
+    width: 6px;
+}
+
+.full-size {
+    width: 100%;
+    height: 100%;
+}
+
+#tree {
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+}
+
+ul.jqtree-tree .jqtree-title {
+/*    color: #000 !important;*/
+}
+
+.jqtree-element {
+    padding-bottom: 1px;
+}
+
+ul.jqtree-tree {
+    margin-top: 10px !important;
+    margin-left: 23px !important;
+    margin-right: 10px !important;
+}
+
+/* Generic single page layout classes */
+
+.row, .col {
+    overflow: hidden;
+    position: absolute;
+}
+
+.row {
+    left: 0;
+    right: 0;
+}
+
+.col {
+    top: 0;
+    bottom: 0;
+}
+
+#menu-button {
+    float: right;
+    margin-top: 2px;
+}
+
+.hidden-large {
+    display: none;
+}
+
+.tree-icon {
+    background-size: 18px 18px !important;
+    background-position: left 2px !important;
+    padding-left: 20px;
+}
+.menu ul.jqtree-tree .jqtree-toggler {
+    top: 3px;
+    left: -1.2em;
+    font-family: "iconfu" !important;
+    font-size: 15pt;
+    line-height: 15pt;
+    height: 100%;
+}
+
+@media only screen and (max-height: 768px) {
+    .body {
+        top: 40px;
+    }
+
+    .header {
+        height: 40px;
+    }
+
+    #heading {
+        display: inline;
+        padding-top: 4pt;
+        font-size: 14pt;
+        float: left;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    #content-shadow {
+        display: none;
+    }
+
+    .content {
+        left: 0;
+        top: 40px;
+    }
+
+    .body {
+        top: 0 !important;
+        z-index: 0;
+    }
+
+    .hidden-small {
+        display: none;
+    }
+
+    .hidden-large {
+        display: inline-block;
+    }
+    
+    .menu {
+        width: 100%;
+        top: 40px;
+        background: white;
+        z-index: 1;
+    }
+
+    .header {
+        height: 40px;
+        z-index: 2;
+    }
+
+    #heading {
+        display: inline;
+        padding-top: 4pt;
+        font-size: 14pt;
+        float: left;
+    }
+
+    ul.jqtree-tree {
+        margin-top: 10px !important;
+        margin-left: 36px !important;
+        margin-right: 10px !important;
+    }
+
+    .menu span {
+        font-size: 14pt;
+        line-height: 25pt;
+    }
+
+    .menu ul.jqtree-tree .jqtree-toggler {
+        top: 0;
+        font-size: 24pt;
+        line-height: 25pt;
+        left: -1.1em;
+    }
+
+    .tree-icon {
+        background-size: 21px 21px !important;
+        background-position: left 4px !important;
+        padding-left: 24px;
+    }
+}

@@ -1,5 +1,7 @@
 package GameObject;
 
+import MainClass.MainGameJframe;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -36,6 +38,7 @@ public class RemovePanel extends GameObject{
             public void mouseClicked(MouseEvent e) {
 //                System.out.println(Click);
                 // 点击一次之后隐藏面板
+                MainGameJframe.money.setText(String.valueOf(Integer.valueOf(MainGameJframe.money.getText()) + 10*t.getLevel()));
                 t.setDEATHFLAG(true);
                 t.setVisible(false);
                 t.updateflag = !t.removeflag;

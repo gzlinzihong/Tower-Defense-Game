@@ -43,12 +43,19 @@ public class UpdatePanel extends GameObject {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(Integer.valueOf(MainGameJframe.money.getText()) > 40) {
+                if(Integer.valueOf(MainGameJframe.money.getText()) >= 40*t.getLevel()) {
                     /**
                      * 扣除金币进行升级，加20攻击力
                      */
-                    MainGameJframe.money.setText(String.valueOf(Integer.valueOf(MainGameJframe.money.getText()) - 40));
-                    t.AD += 20;
+                    MainGameJframe.money.setText(String.valueOf(Integer.valueOf(MainGameJframe.money.getText()) - 40*t.getLevel()));
+                    t.AD += 10*t.getLevel();
+                    String path = t.getPath();
+                    String[] a = path.split("\\.");
+                    path = a[0].substring(0,a[0].length()-1)+String.valueOf(t.getLevel())+"."+a[1];
+                    t.setLevel(t.getLevel()+1);
+                    System.out.println(path);
+                    t.setPath(path);
+//                    t.paintComponent(t.getGraphics());
 
                     // 点击一次之后隐藏面板
                     t.updateflag = !t.removeflag;

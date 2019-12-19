@@ -2,19 +2,12 @@ package GameObject;
 
 import MainClass.MainGameJframe;
 import MyClass.GameMusic;
-import MyClass.MyImgJpanel;
-import javafx.scene.shape.Circle;
 
-import javax.imageio.ImageIO;
-import javax.sound.midi.Soundbank;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -33,13 +26,10 @@ public class Tower extends GameObject implements Runnable{
     RemovePanel removePanel;
     volatile private boolean DEATHFLAG = false; //炮塔移除的信号
 
-    boolean isPutDownFlag = false;
     private ImageIcon img;
     private String path;
     private Bullet bullet ;
     private double degree;
-    private Image iBuffer;
-    private Graphics gBuffer;
     private Monster m;
 
     public Bullet getBullet() {
@@ -60,7 +50,7 @@ public class Tower extends GameObject implements Runnable{
     double R;
     //攻击半径
 
-    int Level;
+    int Level = 1;
     // 等级
 
     int Num;
@@ -82,43 +72,20 @@ public class Tower extends GameObject implements Runnable{
         this.path = path;
         this.addListener();
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-////        super();
-//        this.Level = level;
-//        if(level == 1) {
-//            this.AD = 34;
-//            this.X = x;
-//            this.Y = y;
-//            this.Num = num;
-//        }
-//        new Thread(this).start();
 
     }
     @Override
     protected void paintComponent(Graphics g){
         img = new ImageIcon(path);
-//        File file = new File(path);//本地图片
-
-//        try {
-//            BufferedImage res=(BufferedImage) ImageIO.read(file);
-//            BufferedImage res=(BufferedImage) img.getImage();
             Graphics2D g2 = (Graphics2D)g;
             g2.rotate(degree,getWidth()/2,getHeight()/2);
             g2.drawImage(img.getImage(),0,0,getWidth(),getHeight(),null);
         this.setVisible(true);
         this.setBackground(null);
         this.setOpaque(false);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
     @Override
     public void update(Graphics scr){
-//        img = new ImageIcon(path);
-//        iBuffer=createImage(getWidth(),getHeight());
-//
-//        gBuffer=iBuffer.getGraphics();
-//        gBuffer = (Graphics2D)gBuffer;
-//        gBuffer.drawImage(img.getImage(),0,0,getWidth(),getHeight(),null);
         this.setVisible(false);
         this.paintComponent(scr);
     }
@@ -151,6 +118,28 @@ public class Tower extends GameObject implements Runnable{
         this.bullet.setXY((int)this.X,(int)this.Y);
     }
 
+    @Override
+    public Rectangle getRect() {
+        return new Rectangle((int)this.X+getWidth()/2,(int)this.Y+getHeight()/2,getWidth(),getHeight());
+    }
+
+    public int getLevel() {
+        return Level;
+    }
+
+    public void setLevel(int level) {
+        Level = level;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    @Override
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public void setArray(ArrayList<Monster> monsters) {
         this.monsters = monsters;
          size= monsters.size();
@@ -178,7 +167,7 @@ public class Tower extends GameObject implements Runnable{
                 /**
                  * 若金币不够，则显示灰色升级按钮
                  */
-                if(Integer.valueOf(MainGameJframe.money.getText()) >= 40) {
+                if(Integer.valueOf(MainGameJframe.money.getText()) >= Level*40) {
                     updatePanel.setPath("Image/update01.png");
                 } else {
                     updatePanel.setPath("Image/update02.png");
@@ -201,7 +190,7 @@ public class Tower extends GameObject implements Runnable{
             if(monsters.size() > 0 ) {
                 //当怪物集合中有怪物时开始判断
                 int i = 0;
-                    while (i < monsters.size()) {
+                    while (i < monsters.size()&&MainGameJframe.gameoverflag==false) {
                         monsters.get(i).setTower(X, Y, R);
                         //將当前炮塔的x，y，r值放入每個怪物中
                         /**
@@ -238,7 +227,7 @@ public class Tower extends GameObject implements Runnable{
                                     this.bullet.setVisible(true);
                                     this.bullet.startAD();
                                     try {
-                                        Thread.sleep(2000);
+                                        Thread.sleep(2000-100*Level);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }

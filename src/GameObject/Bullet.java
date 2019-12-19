@@ -1,6 +1,7 @@
 package GameObject;
 
-import MyClass.GameMusic;
+
+import MainClass.MainGameJframe;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,7 @@ public class Bullet extends GameObject implements Runnable{
     private double speedY;
     private boolean flag = true;
     private int AD;
-    private int speed = 4;
+    private int speed = 9;
 
 
     private Monster monster;
@@ -27,13 +28,15 @@ public class Bullet extends GameObject implements Runnable{
         this.height=50;
     }
 
+
+
     public void setAD(int AD) {
         this.AD = AD;
     }
 
     public void setXY(int x, int y ){
         this.X = x;
-        this.Y = y-20;
+        this.Y = y;
     }
     public boolean getFlag() {
         return flag;
@@ -46,7 +49,7 @@ public class Bullet extends GameObject implements Runnable{
     @Override
     public void run() {
         this.setBounds((int)this.X,(int)this.Y,(int)width,(int)height);
-        while (this.getRect().intersects(monster.getRect())==false){
+        while (this.getRect().intersects(monster.getRect())==false&& MainGameJframe.gameoverflag==false){
             flag = false;
             double dis = Math.sqrt(Math.pow((monster.getMonsterX()-this.X), 2) + Math.pow((monster.getMonsterY() - this.Y), 2));
             double angleX = (monster.getMonsterX() - this.X)/dis;

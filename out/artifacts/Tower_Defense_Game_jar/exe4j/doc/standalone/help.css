@@ -1,0 +1,191 @@
+@import "fonts.css";
+
+body, td, th, p, ul, ol, div {
+    font-family: "Open Sans", Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+}
+
+body {
+    max-width: 800px;
+    margin: 10px 15px 10px 15px;
+}
+
+h2 {
+    font-family: "Open Sans", Verdana, Arial, Helvetica, sans-serif;
+    font-size: 14pt;
+}
+
+.scaledImg {
+    display: block;
+    margin: 0 auto;
+    padding: 5px 0;
+}
+
+.svgContainer {
+    margin: 0 auto;
+}
+
+.header-container {
+    display: table;
+    width: 100%;
+}
+
+.header-title {
+    display: table-cell;
+    vertical-align: middle;
+    width: auto;
+}
+
+.header-nav {
+    display: table-cell;
+    vertical-align: baseline;
+    text-align: right;
+    padding-right: 8px;
+    white-space: nowrap;
+}
+
+.nav-left, .nav-right, .nav-up, .nav-down {
+    background-repeat: no-repeat;
+    margin-left: 8px;
+    display: block;
+}
+
+.nav-left {
+    background-image: url("images/keyboard_arrow_left.png");
+    background-size: 32px 32px;
+    height: 32px;
+    width: 32px;
+}
+
+.nav-right {
+    background-image: url("images/keyboard_arrow_right.png");
+    background-size: 32px 32px;
+    height: 32px;
+    width: 32px;
+}
+
+.nav-up {
+    background-image: url("images/keyboard_arrow_up.png");
+    background-size: 32px 32px;
+    height: 32px;
+    width: 32px;
+}
+
+.nav-down {
+    background-image: url("images/keyboard_arrow_down.png");
+    background-size: 32px 32px;
+    height: 32px;
+    width: 32px;
+}
+
+@media (-webkit-min-device-pixel-ratio: 1.5),(min--moz-device-pixel-ratio: 1.5),(min-device-pixel-ratio: 1.5),(min-resolution: 144dpi) {
+    .nav-left {
+        background-image: url("images/keyboard_arrow_left@2x.png");
+    }
+
+    .nav-right {
+        background-image: url("images/keyboard_arrow_right@2x.png");
+    }
+
+    .nav-up {
+        background-image: url("images/keyboard_arrow_up@2x.png");
+    }
+
+    .nav-down {
+        background-image: url("images/keyboard_arrow_down@2x.png");
+    }
+}
+
+.nav-wrapper {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+h2 {
+    margin: 0 0 5px 0;
+}
+
+h3 {
+    margin: 10px 0;
+}
+
+div.spacer {
+    height: 5px;
+}
+
+table.doc {
+    margin-bottom: 15px;
+    border-collapse: collapse;
+}
+
+table.doc th {
+    font-weight: bold;
+    text-align: left;
+}
+
+.with-borders th, .with-borders td {
+    border: 1px solid #dddddd;
+}
+
+table.doc th, table.doc td {
+    padding: 8px;
+    vertical-align: middle;
+}
+
+table.doc tr:nth-child(even) td, table.doc tr:nth-child(even) th {
+    background-color: #f9f9f9;
+}
+
+
+code:before, code:after, tt:before, tt:after {
+    content: " ";
+}
+
+code, tt {
+    background-color: #F8F8F8;
+    border: 1px solid #E1E1E8;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 0;
+    max-width: 100%;
+    overflow: auto;
+    padding: 0;
+    vertical-align: middle;
+    -webkit-overflow-scrolling: touch;
+}
+
+.executable {
+	background-image: url(images/executable.png);
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	padding-left: 15px;
+}
+
+.pre-container {
+    padding-right: 20px;
+}
+
+pre {
+    padding: 5px 8px;
+    border: 1px solid #E1E1E8;
+    background: #F8F8F8;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 1px;
+    min-width: 100%;
+}
+
+@media only screen and (max-device-width: 768px) {
+    code:before, code:after, tt:before, tt:after {
+        content: normal;
+    }
+
+    code, tt {
+        display: inline;
+        background-color: transparent;
+        border: 0;
+        border-radius: 0;
+        word-wrap: break-word;
+        overflow: auto;
+    }
+}
