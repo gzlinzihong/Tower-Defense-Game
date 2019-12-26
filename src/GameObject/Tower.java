@@ -97,7 +97,7 @@ public class Tower extends GameObject implements Runnable{
     public void setUpdatePanel(UpdatePanel updatePanel) {
         this.updatePanel = updatePanel;
         this.updatePanel.setT(this);
-        this.updatePanel.setBounds((int)X + MAX_BGWIDTH / 2,(int)Y - 50 - 2,MAX_BGWIDTH - 20,MAX_BGWIDTH - 20);
+        this.updatePanel.setBounds((int)X + MAX_BGWIDTH ,(int)Y - 50 - 2,MAX_BGWIDTH - 20,MAX_BGWIDTH - 20);
         this.updatePanel.setVisible(updateflag);
     }
 
@@ -108,7 +108,7 @@ public class Tower extends GameObject implements Runnable{
     public void setRemovePanel(RemovePanel removePanel) {
         this.removePanel = removePanel;
         this.removePanel.setT(this);
-        this.removePanel.setBounds((int)X + MAX_BGWIDTH / 2,(int)Y + 2,MAX_BGWIDTH - 20,MAX_BGWIDTH - 20);
+        this.removePanel.setBounds((int)X + MAX_BGWIDTH ,(int)Y + 2,MAX_BGWIDTH - 20,MAX_BGWIDTH - 20);
         this.removePanel.setVisible(removeflag);
     }
 
@@ -202,13 +202,13 @@ public class Tower extends GameObject implements Runnable{
                             double duibian = Math.abs(m.getMonsterX() - this.X);
                             double xiebian = Math.sqrt(linbian * linbian + duibian * duibian);
                                 if (m.getMonsterY() < this.Y && m.getMonsterX() < this.X) {
-                                    this.degree = (-1) * Math.atan(Math.abs(duibian / linbian));
+                                    this.degree = (-1) * Math.atan(Math.abs(duibian / linbian));//第二象限
                                 } else if (m.getMonsterY() < this.Y && m.getMonsterX() > this.X) {
-                                    this.degree = Math.atan(Math.abs(duibian / linbian));
+                                    this.degree = Math.atan(Math.abs(duibian / linbian));//第一象限
                                 } else if (m.getMonsterY() > this.Y && m.getMonsterX() > this.X) {
-                                    this.degree = Math.PI - Math.atan(Math.abs(duibian / linbian));
+                                    this.degree = Math.PI - Math.atan(Math.abs(duibian / linbian));//第三象限
                                 } else if (m.getMonsterY() > this.Y && m.getMonsterX() < this.X) {
-                                    this.degree = Math.PI + Math.atan(Math.abs(duibian / linbian));
+                                    this.degree = Math.PI + Math.atan(Math.abs(duibian / linbian));//第四象限
                                 }
                                 if (DEATHFLAG){
                                     break;

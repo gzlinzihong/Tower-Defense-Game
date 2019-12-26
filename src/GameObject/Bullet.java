@@ -18,7 +18,7 @@ public class Bullet extends GameObject implements Runnable{
     private double speedY;
     private boolean flag = true;
     private int AD;
-    private int speed = 9;
+    private int speed = 5;
 
 
     private Monster monster;
